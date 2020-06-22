@@ -81,8 +81,8 @@ namespace DiscordBot
 
 			if (msg.Contains("cheh"))
 			{
-				await message.DeleteAsync();
 				await message.Channel.SendMessageAsync("Non toi cheh ! " + message.Author.Mention);
+				await message.AddReactionAsync(new Emoji("❌"));
 			}
 		}
 	}
