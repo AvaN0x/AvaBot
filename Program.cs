@@ -78,6 +78,12 @@ namespace DiscordBot
 				await message.Channel.SendMessageAsync("Non ta gueule ! " + message.Author.Mention + "\nRaison : je veux pas jouer à ce modpack !");
 				await message.AddReactionAsync(new Emoji("❌"));
 			}
+
+			if (msg.Contains("cheh"))
+			{
+				await message.DeleteAsync();
+				await message.Channel.SendMessageAsync("Non toi cheh ! " + message.Author.Mention);
+			}
 		}
 	}
 }
