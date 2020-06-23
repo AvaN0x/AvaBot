@@ -7,6 +7,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 
 namespace DiscordBot
@@ -67,6 +68,7 @@ namespace DiscordBot
 
 			var msg = message.Content.ToLower();
 
+			// modpack case
 			if ((msg.Contains("mod") || msg.Contains("maud") || msg.Contains("meaud") || msg.Contains("m0d")
 					|| msg.Contains("mot") || msg.Contains("maut") || msg.Contains("meaut") || msg.Contains("m0t")
 					|| msg.Contains("mox") || msg.Contains("maux") || msg.Contains("meaux") || msg.Contains("m0x")
@@ -79,11 +81,19 @@ namespace DiscordBot
 				await message.AddReactionAsync(new Emoji("❌"));
 			}
 
+
+			// cheh case
 			if (msg.Contains("cheh"))
 			{
 				await message.Channel.SendMessageAsync("Non toi cheh ! " + message.Author.Mention);
 				await message.AddReactionAsync(new Emoji("❌"));
 			}
+
+			// -ine case
+			var ineList = Regex.Matches(msg, "[a-zA-Z]+ine").Cast<Match>().Select(m => m.Value).ToList();
+			//await message.Channel.SendMessageAsync("||Debug : " + ineList.Count() + "||");
+			for (int i = 0; i < (ineList.Count() > 10 ? 10 : ineList.Count()); i++)
+				await message.Channel.SendMessageAsync("Non c'est pas " + ineList[i] + " mais pain au " + (ineList[i])[0..^3] + " !");
 		}
 	}
 }
