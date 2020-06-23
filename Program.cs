@@ -59,9 +59,11 @@ namespace DiscordBot
 			// The bot should never respond to itself.
 			if (message.Author.Id == _client.CurrentUser.Id)
 				return;
+
+			// Is dadbot
 			if (message.Author.IsBot)
 			{
-				if (message.Author.Id == 503720029456695306) // Is dadbot
+				if (message.Author.Id == 503720029456695306)
 					await message.Channel.SendMessageAsync("Shut up dad !");
 				return;
 			}
@@ -79,21 +81,26 @@ namespace DiscordBot
 			{
 				await message.Channel.SendMessageAsync("Non ta gueule ! " + message.Author.Mention + "\nRaison : je veux pas jouer à ce modpack !");
 				await message.AddReactionAsync(new Emoji("❌"));
+				return;
 			}
-
 
 			// cheh case
 			if (msg.Contains("cheh"))
 			{
 				await message.Channel.SendMessageAsync("Non toi cheh ! " + message.Author.Mention);
 				await message.AddReactionAsync(new Emoji("❌"));
+				return;
 			}
 
 			// -ine case
 			var ineList = Regex.Matches(msg, "[a-zA-Z]+ine").Cast<Match>().Select(m => m.Value).ToList();
-			//await message.Channel.SendMessageAsync("||Debug : " + ineList.Count() + "||");
-			for (int i = 0; i < (ineList.Count() > 10 ? 10 : ineList.Count()); i++)
-				await message.Channel.SendMessageAsync("Non c'est pas " + ineList[i] + " mais pain au " + (ineList[i])[0..^3] + " !");
+			if (ineList.Count() > 0) {
+				//await message.Channel.SendMessageAsync("||Debug : " + ineList.Count() + "||");
+				for (int i = 0; i < (ineList.Count() > 10 ? 10 : ineList.Count()); i++)
+					await message.Channel.SendMessageAsync("Non c'est pas " + ineList[i] + " mais pain au " + (ineList[i])[0..^3] + " !");
+				return;
+			}
+
 		}
 	}
 }
