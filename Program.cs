@@ -70,38 +70,36 @@ namespace DiscordBot
 
 			var msg = message.Content.ToLower();
 
-			// modpack case
-			if ((msg.Contains("mod") || msg.Contains("maud") || msg.Contains("meaud") || msg.Contains("m0d")
-					|| msg.Contains("mot") || msg.Contains("maut") || msg.Contains("meaut") || msg.Contains("m0t")
-					|| msg.Contains("mox") || msg.Contains("maux") || msg.Contains("meaux") || msg.Contains("m0x")
-					|| msg.Contains("mos") || msg.Contains("maus") || msg.Contains("meaus") || msg.Contains("m0s"))
-					&&
-					(msg.Contains("pac") || msg.Contains("paq") || msg.Contains("pak"))
-				)
 			{
-				await message.Channel.SendMessageAsync("Non ta gueule ! " + message.Author.Mention + "\nRaison : je veux pas jouer à ce modpack !");
-				await message.AddReactionAsync(new Emoji("❌"));
-				return;
+				// modpack case
+				if (new Regex("(m(o|0|au|eau)(d|t|s|x|e de)?).{0,5}(p(a|4)(c|q|k))").IsMatch(msg))
+				{
+					await message.Channel.SendMessageAsync("Non ta gueule ! " + message.Author.Mention + "\nRaison : je veux pas jouer à ce modpack !");
+					await message.AddReactionAsync(new Emoji("❌"));
+					return;
+				}
 			}
-
-			// cheh case
-			if (msg.Contains("cheh"))
-			{
-				await message.Channel.SendMessageAsync("Non toi cheh ! " + message.Author.Mention);
-				await message.AddReactionAsync(new Emoji("❌"));
-				return;
+			{	
+				// "cheh" case
+				if (new Regex("(ch([eéè]+|ai)h+)").IsMatch(msg))
+				{
+					await message.Channel.SendMessageAsync("Non toi cheh ! " + message.Author.Mention);
+					await message.AddReactionAsync(new Emoji("❌"));
+					return;
+				}
 			}
-
-			// -ine case
-			var ineList = Regex.Matches(msg, "[a-zA-Z]+ine").Cast<Match>().Select(m => m.Value).ToList();
-			int maxPerMsg = 10;
-			if (ineList.Count() > 0) {
-				//await message.Channel.SendMessageAsync("||Debug : " + ineList.Count() + "||");
-				for (int i = 0; i < (ineList.Count() > maxPerMsg ? maxPerMsg : ineList.Count()); i++)
-					await message.Channel.SendMessageAsync("Non ce n'est pas " + ineList[i] + " mais pain au " + (ineList[i])[0..^3] + " !");
-				return;
+			{	
+				// -ine case
+				var ineList = Regex.Matches(msg, "[a-zA-ZÀ-ÿ]+ine").Cast<Match>().Select(m => m.Value).ToList();
+				int maxPerMsg = 10;
+				if (ineList.Count() > 0)
+				{
+					//await message.Channel.SendMessageAsync("||Debug : " + ineList.Count() + "||");
+					for (int i = 0; i < (ineList.Count() > maxPerMsg ? maxPerMsg : ineList.Count()); i++)
+						await message.Channel.SendMessageAsync("Non ce n'est pas " + ineList[i] + " mais pain " + (new Regex("(s|x)$").IsMatch((ineList[i])[0..^3]) ? "aux" : "au") + " " + (ineList[i])[0..^3] + " !");
+					return;
+				}
 			}
-
 		}
 	}
 }
