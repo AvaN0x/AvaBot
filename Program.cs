@@ -94,10 +94,11 @@ namespace DiscordBot
 
 			// -ine case
 			var ineList = Regex.Matches(msg, "[a-zA-Z]+ine").Cast<Match>().Select(m => m.Value).ToList();
+			int maxPerMsg = 10;
 			if (ineList.Count() > 0) {
 				//await message.Channel.SendMessageAsync("||Debug : " + ineList.Count() + "||");
-				for (int i = 0; i < (ineList.Count() > 10 ? 10 : ineList.Count()); i++)
-					await message.Channel.SendMessageAsync("Non c'est pas " + ineList[i] + " mais pain au " + (ineList[i])[0..^3] + " !");
+				for (int i = 0; i < (ineList.Count() > maxPerMsg ? maxPerMsg : ineList.Count()); i++)
+					await message.Channel.SendMessageAsync("Non ce n'est pas " + ineList[i] + " mais pain au " + (ineList[i])[0..^3] + " !");
 				return;
 			}
 
