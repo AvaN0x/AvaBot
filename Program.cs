@@ -38,6 +38,8 @@ namespace DiscordBot
 			await _client.LoginAsync(TokenType.Bot, _config["Token"]);
 			await _client.StartAsync();
 
+			await _client.SetGameAsync("github.com/AvaN0x", "", ActivityType.Watching);
+
 			// Block this task until the program is closed.
 			await Task.Delay(-1);
 		}
