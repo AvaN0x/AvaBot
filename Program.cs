@@ -62,44 +62,64 @@ namespace DiscordBot
 			if (message.Author.Id == _client.CurrentUser.Id)
 				return;
 
-			// Is dadbot
 			if (message.Author.IsBot)
 			{
-				if (message.Author.Id == 503720029456695306)
+				if (message.Author.Id == 503720029456695306) // Is dadbot
 					await message.Channel.SendMessageAsync("Shut up dad !");
 				return;
 			}
 
 			var msg = message.Content.ToLower();
 
+			
+			// commands
 			{
-				// modpack case
-				if (new Regex("(m(o|0|au|eau)(d|t|s|x|e de)?).{0,5}(p(a|4)(c|q|k))").IsMatch(msg))
+				if (msg.StartsWith("//" + "embed"))
 				{
-					await message.Channel.SendMessageAsync("Non ta gueule ! " + message.Author.Mention + "\nRaison : je veux pas jouer à ce modpack !");
-					await message.AddReactionAsync(new Emoji("❌"));
-					return;
+					EmbedBuilder embedMessage = new EmbedBuilder();
+
+					embedMessage.WithTitle("AvaN0x - Clément RICATTE")
+						.AddField("Github", "[github.com/AvaN0x](https://github.com/AvaN0x)", false)
+						.AddField("WebSite", "[avan0x.github.io](https://avan0x.github.io/)", false)    // true - for inline
+						.WithFooter("AvaN0x", "https://avatars3.githubusercontent.com/u/27494805?s=460&v=4")
+						.WithThumbnailUrl("https://avatars3.githubusercontent.com/u/27494805?s=460&v=4")
+						.WithColor(255, 241, 185);
+					
+					await message.Channel.SendMessageAsync("", false, embedMessage.Build());
+					await message.DeleteAsync();
 				}
 			}
-			{	
-				// "cheh" case
-				if (new Regex("(ch([eéè]+|ai)h+)").IsMatch(msg))
+
+			{
 				{
-					await message.Channel.SendMessageAsync("Non toi cheh ! " + message.Author.Mention);
-					await message.AddReactionAsync(new Emoji("❌"));
-					return;
+					// modpack case
+					if (new Regex("(m(o|0|au|eau)(d|t|s|x|e de)?).{0,5}(p(a|4)(c|q|k))").IsMatch(msg))
+					{
+						await message.Channel.SendMessageAsync("Non ta gueule ! " + message.Author.Mention + "\nRaison : je veux pas jouer à ce modpack !");
+						await message.AddReactionAsync(new Emoji("❌"));
+						return;
+					}
 				}
-			}
-			{	
-				// -ine case
-				var ineList = Regex.Matches(msg, "[a-zA-ZÀ-ÿ]+ine").Cast<Match>().Select(m => m.Value).ToList();
-				int maxPerMsg = 10;
-				if (ineList.Count() > 0)
 				{
-					//await message.Channel.SendMessageAsync("||Debug : " + ineList.Count() + "||");
-					for (int i = 0; i < (ineList.Count() > maxPerMsg ? maxPerMsg : ineList.Count()); i++)
-						await message.Channel.SendMessageAsync("Non ce n'est pas " + ineList[i] + " mais pain " + (new Regex("(s|x)$").IsMatch((ineList[i])[0..^3]) ? "aux" : "au") + " " + (ineList[i])[0..^3] + " !");
-					return;
+					// "cheh" case
+					if (new Regex("(ch([eéè]+|ai)h+)").IsMatch(msg))
+					{
+						await message.Channel.SendMessageAsync("Non toi cheh ! " + message.Author.Mention);
+						await message.AddReactionAsync(new Emoji("❌"));
+						return;
+					}
+				}
+				{
+					// -ine case
+					var ineList = Regex.Matches(msg, "[a-zA-ZÀ-ÿ]+ine").Cast<Match>().Select(m => m.Value).ToList();
+					int maxPerMsg = 10;
+					if (ineList.Count() > 0)
+					{
+						//await message.Channel.SendMessageAsync("||Debug : " + ineList.Count() + "||");
+						for (int i = 0; i < (ineList.Count() > maxPerMsg ? maxPerMsg : ineList.Count()); i++)
+							await message.Channel.SendMessageAsync("Non ce n'est pas " + ineList[i] + " mais pain " + (new Regex("(s|x)$").IsMatch((ineList[i])[0..^3]) ? "aux" : "au") + " " + (ineList[i])[0..^3] + " !");
+						return;
+					}
 				}
 			}
 		}
