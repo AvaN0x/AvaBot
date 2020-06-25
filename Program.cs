@@ -75,7 +75,7 @@ namespace AvaBot
 
 			var msg = message.Content.ToLower();
 			var actualGuild = settings.Get(((SocketGuildChannel)message.Channel).Guild.Id);
-			var ui = ((SocketGuildChannel)message.Channel).Guild.Owner == message.Author;
+			
 			// commands
 			{
 				if (msg.StartsWith("//" + "embed"))
