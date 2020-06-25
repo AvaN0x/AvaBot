@@ -4,7 +4,7 @@ using System.Text;
 using System.IO;
 using System.Runtime.Serialization.Formatters.Binary;
 
-namespace DiscordBot
+namespace AvaBot
 {
     [Serializable]
     public class Settings
