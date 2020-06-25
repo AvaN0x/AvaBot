@@ -99,17 +99,17 @@ namespace AvaBot
 				{
 					actualGuild.all = true;
 					settings.SaveSettings();
-					await message.Channel.SendMessageAsync("all value : " + actualGuild.all);
+					await message.Channel.SendMessageAsync("all settings value : " + actualGuild.all);
 				}
 				if (msg.StartsWith("//" + "false"))
 				{
 					actualGuild.all = false;
 					settings.SaveSettings();
-					await message.Channel.SendMessageAsync("all value : " + actualGuild.all);
+					await message.Channel.SendMessageAsync("all settings value : " + actualGuild.all);
 				}
 				if (msg.StartsWith("//" + "all"))
 				{
-					await message.Channel.SendMessageAsync("all value : " + actualGuild.all);
+					await message.Channel.SendMessageAsync("all settings value : " + actualGuild.all);
 				}
 			}
 
