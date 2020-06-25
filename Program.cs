@@ -5,6 +5,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Configuration.Json;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using System.Text;
 using System.Text.RegularExpressions;
@@ -16,6 +17,7 @@ namespace DiscordBot
 	{
 		private DiscordSocketClient _client;
 		private IConfiguration _config;
+		private Settings settings;
 
 		public static void Main(string[] args)
 			=> new Program().MainAsync().GetAwaiter().GetResult();
@@ -39,6 +41,8 @@ namespace DiscordBot
 			await _client.StartAsync();
 
 			await _client.SetGameAsync("github.com/AvaN0x", "", ActivityType.Watching);
+
+			settings = new Settings();
 
 			// Block this task until the program is closed.
 			await Task.Delay(-1);
@@ -70,8 +74,8 @@ namespace DiscordBot
 			}
 
 			var msg = message.Content.ToLower();
-
-			
+			var actualGuild = settings.Get(((SocketGuildChannel)message.Channel).Guild.Id);
+			var ui = ((SocketGuildChannel)message.Channel).Guild.Owner == message.Author;
 			// commands
 			{
 				if (msg.StartsWith("//" + "embed"))
@@ -89,7 +93,30 @@ namespace DiscordBot
 					await message.DeleteAsync();
 				}
 			}
+			if (message.Author == ((SocketGuildChannel)message.Channel).Guild.Owner)
+			{
+				if (msg.StartsWith("//" + "true"))
+				{
+					actualGuild.all = true;
+					settings.SaveSettings();
+					await message.Channel.SendMessageAsync("all value : " + actualGuild.all);
+				}
+				if (msg.StartsWith("//" + "false"))
+				{
+					actualGuild.all = false;
+					settings.SaveSettings();
+					await message.Channel.SendMessageAsync("all value : " + actualGuild.all);
+				}
+				if (msg.StartsWith("//" + "all"))
+				{
+					await message.Channel.SendMessageAsync("all value : " + actualGuild.all);
+				}
+			}
 
+
+			
+
+			if (actualGuild.all)
 			{
 				{
 					// modpack case
