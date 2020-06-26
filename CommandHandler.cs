@@ -83,6 +83,13 @@ namespace AvaBot
                         return;
                     }
 
+                    // "gf1" case
+                    if (new Regex("(gf1|j.?ai.?faim)").IsMatch(msg))
+                    {
+                        await message.Channel.SendMessageAsync("Moi aussi j'ai faim !");
+                        return;
+                    }
+
                     // -ine case
                     var ineList = Regex.Matches(msg, "[a-zA-ZÀ-ÿ]+ine").Cast<Match>().Select(m => m.Value).ToList();
                     int maxPerMsg = 10;
