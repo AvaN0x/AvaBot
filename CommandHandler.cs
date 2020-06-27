@@ -131,7 +131,10 @@ namespace AvaBot
 
             // failure scenario, let's let the user know
             Console.WriteLine($"{context.User} something went wrong -> [{result}]!");
-            await context.Channel.SendMessageAsync("This command does not exist.");
+            EmbedBuilder embedMessage = new EmbedBuilder()
+                .WithDescription("This command does not exist.")
+                .WithColor(255, 0, 0);
+            await context.Channel.SendMessageAsync("", false, embedMessage.Build());
         }        
     }
 }

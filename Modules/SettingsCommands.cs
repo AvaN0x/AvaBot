@@ -20,7 +20,10 @@ namespace AvaBot.Modules
         [RequireOwner]
         public async Task NoSettingFoundCommand()
         {
-            await ReplyAsync("No setting found");
+            EmbedBuilder embedMessage = new EmbedBuilder()
+                .WithDescription("No setting found")
+                .WithColor(255, 0, 0);
+            await ReplyAsync("", false, embedMessage.Build());
         }
 
         [Command("all")]
