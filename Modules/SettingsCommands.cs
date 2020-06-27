@@ -26,28 +26,10 @@ namespace AvaBot.Modules
         [Command("all")]
         [RequireOwner]
         public async Task SetAllCommand(string value = null)
-        {
-            SetBoolean("all", Program.settings.Get(Context.Guild.Id).all, value);
-            //bool flag;
-            //if (Boolean.TryParse(value, out flag))
-            //{
-            //    Program.settings.Get(Context.Guild.Id).all = flag;
-            //    Program.settings.SaveSettings();
-            //    EmbedBuilder embedMessage = new EmbedBuilder()
-            //        .WithDescription("Value of **" + "all" + "** set to *" + flag + "*")
-            //        .WithColor(255, 241, 185);
-            //    await ReplyAsync("", false, embedMessage.Build());
-            //}
-            //else
-            //{
-            //    EmbedBuilder embedMessage = new EmbedBuilder()
-            //        .WithDescription("Value of **" + "all" + "** is *" + Program.settings.Get(Context.Guild.Id).all + "*")
-            //        .WithColor(255, 241, 185);
-            //    await ReplyAsync("", false, embedMessage.Build());
-            //}
-        }
+            => await SetBoolean("all", Program.settings.Get(Context.Guild.Id).all, value);
 
-        public async void SetBoolean(string settingName, bool setting, string value)
+
+        public async Task SetBoolean(string settingName, bool setting, string value)
         {
             bool flag;
             if (Boolean.TryParse(value, out flag))
