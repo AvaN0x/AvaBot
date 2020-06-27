@@ -30,7 +30,12 @@ namespace AvaBot
                 if (Program.settings.Get(((SocketGuildChannel)message.Channel).Guild.Id).chehScan &&
                      new Regex("(ch([eéè]+|ai)h+)").IsMatch(msg))
                 {
-                    await message.Channel.SendMessageAsync("Non toi cheh ! " + message.Author.Mention + "\nhttps://tenor.com/blYQK.gif");
+                    EmbedBuilder embedMessage = new EmbedBuilder()
+                        .WithImageUrl("https://media.tenor.com/images/db5d206d665edc6b77c088da7bba097b/tenor.gif")
+                        .WithColor(255, 241, 185);
+
+                    await message.Channel.SendMessageAsync("Non toi cheh ! " + message.Author.Mention, false, embedMessage.Build());
+
                     await message.AddReactionAsync(new Emoji("❌"));
                     return;
                 }
