@@ -19,7 +19,7 @@ namespace AvaBot.Modules
     public class SettingsCommands : ModuleBase
     {
         [Command]
-        public async Task NoSettingFoundCommand()
+        public async Task AllValueCommand()
         {
             var guildSettings = Program.settings.Get(Context.Guild.Id);
             EmbedBuilder embedMessage = new EmbedBuilder()
