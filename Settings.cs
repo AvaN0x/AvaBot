@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Text;
 using System.IO;
 using System.Runtime.Serialization.Formatters.Binary;
+using System.Runtime.Serialization;
 
 namespace AvaBot
 {
@@ -72,11 +73,18 @@ namespace AvaBot
     [Serializable]
     public class GuildSettings
     {
-        public bool all { get; set; }
+        public bool modpackScan { get; set; }
+        public bool chehScan { get; set; }
+        public bool gf1Scan { get; set; }
+        public bool ineScan { get; set; }
 
         public GuildSettings()
         {
-            this.all = true;
+            this.modpackScan = true;
+            this.chehScan = true;
+            this.gf1Scan = true;
+            this.ineScan = true;
+
         }
     }
 }

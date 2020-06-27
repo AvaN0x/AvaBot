@@ -63,45 +63,7 @@ namespace AvaBot
             // determine if the message has a valid prefix, and adjust argPos based on prefix
             if (!(message.HasStringPrefix(prefix, ref argPos))) 
             {
-                // TODO place this somewhere else
-                var msg = message.Content.ToLower();
-                if (Program.settings.Get(((SocketGuildChannel)message.Channel).Guild.Id).all)
-                {
-                    // modpack case
-                    if (new Regex("(m(o|0|au|eau)(d|t|s|x|e de)?).{0,5}(p(a|4)(c|q|k))").IsMatch(msg))
-                    {
-                        await message.Channel.SendMessageAsync("Non ta gueule ! " + message.Author.Mention + "\nRaison : je veux pas jouer à ce modpack !");
-                        await message.AddReactionAsync(new Emoji("❌"));
-                        return;
-                    }
-
-                    // "cheh" case
-                    if (new Regex("(ch([eéè]+|ai)h+)").IsMatch(msg))
-                    {
-                        await message.Channel.SendMessageAsync("Non toi cheh ! " + message.Author.Mention + "\nhttps://tenor.com/blYQK.gif");
-                        await message.AddReactionAsync(new Emoji("❌"));
-                        return;
-                    }
-
-                    // "gf1" case
-                    if (new Regex("(gf1|j.?ai.?faim)").IsMatch(msg))
-                    {
-                        await message.Channel.SendMessageAsync("Moi aussi j'ai faim !");
-                        return;
-                    }
-
-                    // -ine case
-                    var ineList = Regex.Matches(msg, "[a-zA-ZÀ-ÿ]+ine").Cast<Match>().Select(m => m.Value).ToList();
-                    int maxPerMsg = 10;
-                    if (ineList.Count() > 0)
-                    {
-                        //await message.Channel.SendMessageAsync("||Debug : " + ineList.Count() + "||");
-                        for (int i = 0; i < (ineList.Count() > maxPerMsg ? maxPerMsg : ineList.Count()); i++)
-                            await message.Channel.SendMessageAsync("Non ce n'est pas " + ineList[i] + " mais pain " + (new Regex("(s|x)$").IsMatch((ineList[i])[0..^3]) ? "aux" : "au") + " " + (ineList[i])[0..^3] + " !");
-                        return;
-                    }
-                }
-
+                await TextObservation.Scan(message);
                 return;
             }
            
