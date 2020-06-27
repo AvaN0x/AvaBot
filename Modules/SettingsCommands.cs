@@ -21,10 +21,27 @@ namespace AvaBot.Modules
         [Command]
         public async Task NoSettingFoundCommand()
         {
+            var guildSettings = Program.settings.Get(Context.Guild.Id);
             EmbedBuilder embedMessage = new EmbedBuilder()
-                .WithDescription("No setting found")
-                .WithColor(255, 0, 0);
+                .WithTitle("Commands states")
+                .WithDescription("*Always* mean that the value cannot be changed.")
+                .AddField("Randoms", "" +
+                    "• `github` or `avan0x` : *Always*" +
+                    "", false)
+                .AddField("Text scan", "" +
+                "• `modpack` : *" + (guildSettings.modpackScan ? "Activated" : "Disabled") + "*" +
+                "\n• `cheh` : *" + (guildSettings.chehScan ? "Activated" : "Disabled") + "*" +
+                "\n• `gf1` : *" + (guildSettings.gf1Scan ? "Activated" : "Disabled") + "*" +
+                "\n• `ine` : *" + (guildSettings.ineScan ? "Activated" : "Disabled") + "*" +
+                "", false)
+                .AddField("User", "" +
+                    "• `createdat` : *Always*" +
+                    "", false)
+                .WithFooter("github.com/AvaN0x", "https://avatars3.githubusercontent.com/u/27494805?s=460&v=4")
+                .WithColor(255, 241, 185);
+
             await ReplyAsync("", false, embedMessage.Build());
+
         }
 
         [Group("textscan")]
@@ -37,13 +54,14 @@ namespace AvaBot.Modules
             [Command]
             public async Task SetTextScanCommand(string value = null)
             {
+                var guildSettings = Program.settings.Get(Context.Guild.Id);
                 bool flag;
                 if (Boolean.TryParse(value, out flag))
                 {
-                    Program.settings.Get(Context.Guild.Id).modpackScan = flag;
-                    Program.settings.Get(Context.Guild.Id).chehScan = flag;
-                    Program.settings.Get(Context.Guild.Id).gf1Scan = flag;
-                    Program.settings.Get(Context.Guild.Id).ineScan = flag;
+                    guildSettings.modpackScan = flag;
+                    guildSettings.chehScan = flag;
+                    guildSettings.gf1Scan = flag;
+                    guildSettings.ineScan = flag;
                     Program.settings.SaveSettings();
                     EmbedBuilder embedMessage = new EmbedBuilder()
                         .WithDescription("Value of **modpack** set to *" + flag + "*" +
@@ -56,10 +74,10 @@ namespace AvaBot.Modules
                 else
                 {
                     EmbedBuilder embedMessage = new EmbedBuilder()
-                        .WithDescription("Value of **modpack** is *" + Program.settings.Get(Context.Guild.Id).modpackScan + "*" +
-                            "\nValue of **cheh** is *" + Program.settings.Get(Context.Guild.Id).chehScan + "*" +
-                            "\nValue of **gf1** is *" + Program.settings.Get(Context.Guild.Id).gf1Scan + "*" +
-                            "\nValue of **ine** is *" + Program.settings.Get(Context.Guild.Id).ineScan + "*")
+                        .WithDescription("Value of **modpack** is *" + guildSettings.modpackScan + "*" +
+                            "\nValue of **cheh** is *" + guildSettings.chehScan + "*" +
+                            "\nValue of **gf1** is *" + guildSettings.gf1Scan + "*" +
+                            "\nValue of **ine** is *" + guildSettings.ineScan + "*")
                         .WithColor(255, 241, 185);
                     await ReplyAsync("", false, embedMessage.Build());
                 }
