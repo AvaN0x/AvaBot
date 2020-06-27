@@ -9,6 +9,7 @@ using System.Threading.Tasks;
 using System.Collections.Generic;
 using Microsoft.Extensions.Configuration;
 
+#pragma warning disable CS1998
 namespace AvaBot.Modules
 {
     // for commands to be available, and have the Context passed to them, we must inherit ModuleBase
