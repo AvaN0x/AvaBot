@@ -1,4 +1,4 @@
-using Discord;
+ï»¿using Discord;
 using Discord.Net;
 using Discord.WebSocket;
 using Discord.Commands;
@@ -26,16 +26,16 @@ namespace AvaBot.Modules
                 .WithTitle("Commands states")
                 .WithDescription("*Always* mean that the value cannot be changed.")
                 .AddField("Randoms", "" +
-                    "• `github` or `avan0x` : *Always*" +
+                    "â€¢ `github` or `avan0x` : *Always*" +
                     "", false)
                 .AddField("Text scan", "" +
-                "• `modpack` : *" + (guildSettings.modpackScan ? "Activated" : "Disabled") + "*" +
-                "\n• `cheh` : *" + (guildSettings.chehScan ? "Activated" : "Disabled") + "*" +
-                "\n• `gf1` : *" + (guildSettings.gf1Scan ? "Activated" : "Disabled") + "*" +
-                "\n• `ine` : *" + (guildSettings.ineScan ? "Activated" : "Disabled") + "*" +
+                "â€¢ `modpack` : *" + (guildSettings.modpackScan ? "Activated" : "Disabled") + "*" +
+                "\nâ€¢ `cheh` : *" + (guildSettings.chehScan ? "Activated" : "Disabled") + "*" +
+                "\nâ€¢ `gf1` : *" + (guildSettings.gf1Scan ? "Activated" : "Disabled") + "*" +
+                "\nâ€¢ `ine` : *" + (guildSettings.ineScan ? "Activated" : "Disabled") + "*" +
                 "", false)
                 .AddField("User", "" +
-                    "• `createdat` : *Always*" +
+                    "â€¢ `createdat` : *Always*" +
                     "", false)
                 .WithFooter("github.com/AvaN0x", "https://avatars3.githubusercontent.com/u/27494805?s=460&v=4")
                 .WithColor(255, 241, 185);
