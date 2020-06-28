@@ -64,7 +64,7 @@ namespace AvaBot
             else
             {
                 guildSettings.Add(key, new GuildSettings());
-                Console.WriteLine("Update settings for " + key);
+                Console.WriteLine("Add settings for " + key);
                 return guildSettings[key];
             }
         }
