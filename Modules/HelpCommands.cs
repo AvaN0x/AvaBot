@@ -22,7 +22,8 @@ namespace AvaBot.Modules
         {
             EmbedBuilder embedMessage = new EmbedBuilder()
                 .WithTitle("Commands help")
-                .WithDescription("The prefix is `//`." + 
+                .WithDescription("" + 
+                    "The prefix is `//`." + 
                     "\nUse `//help settings` for informations about setting commands.")
                 .AddField("Randoms", "" +
                     "• `github` or `avan0x` : send informations about the bot owner" +
