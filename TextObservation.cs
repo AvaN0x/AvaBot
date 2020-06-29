@@ -16,7 +16,7 @@ namespace AvaBot
         {
             if (!(message.Channel is SocketGuildChannel channel))
                 return;
-            var settings = Program.settings.Get(((SocketGuildChannel)message.Channel).Guild.Id);
+            var settings = Utils.GetSettings(((SocketGuildChannel)message.Channel).Guild.Id);
             var msg = message.Content.ToLower();
             // modpack case
             if (settings.modpackScan && 

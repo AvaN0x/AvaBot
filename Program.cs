@@ -15,7 +15,6 @@ namespace AvaBot
         // setup our fields we assign later
         private readonly IConfiguration _config;
         private DiscordSocketClient _client;
-        public static Settings settings { get; set; }
 
         static void Main(string[] args)
         {
@@ -57,7 +56,7 @@ namespace AvaBot
 
                 await _client.SetGameAsync("github.com/AvaN0x", "", ActivityType.Watching);
 
-                settings = new Settings();
+                Utils.Init();
 
                 await Task.Delay(-1);
             }

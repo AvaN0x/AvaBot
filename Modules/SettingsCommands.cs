@@ -21,7 +21,7 @@ namespace AvaBot.Modules
         [Command]
         public async Task AllValueCommand()
         {
-            var guildSettings = Program.settings.Get(Context.Guild.Id);
+            var guildSettings = Utils.GetSettings(Context.Guild.Id);
             EmbedBuilder embedMessage = new EmbedBuilder()
                 .WithTitle("Commands states")
                 .WithDescription("*Always* mean that the value cannot be changed.")
@@ -54,7 +54,7 @@ namespace AvaBot.Modules
             [Command]
             public async Task SetTextScanCommand(string value = null)
             {
-                var guildSettings = Program.settings.Get(Context.Guild.Id);
+                var guildSettings = Utils.GetSettings(Context.Guild.Id);
                 bool flag;
                 if (Boolean.TryParse(value, out flag))
                 {
@@ -62,7 +62,7 @@ namespace AvaBot.Modules
                     guildSettings.chehScan = flag;
                     guildSettings.gf1Scan = flag;
                     guildSettings.ineScan = flag;
-                    Program.settings.SaveSettings();
+                    Utils.SaveSettings();
                     EmbedBuilder embedMessage = new EmbedBuilder()
                         .WithDescription("Value of **modpack** set to *" + flag + "*" +
                             "\nValue of **cheh** set to *" + flag + "*" +
@@ -89,10 +89,10 @@ namespace AvaBot.Modules
             [RequireOwner]
             public async Task SetModpackScanCommand(string value = null)
             {
-                var setting = Program.settings.Get(Context.Guild.Id).modpackScan;
+                var setting = Utils.GetSettings(Context.Guild.Id).modpackScan;
                 var embedMessage = SetBoolean("modpack", ref setting, value);
-                Program.settings.Get(Context.Guild.Id).modpackScan = setting;
-                Program.settings.SaveSettings();
+                Utils.GetSettings(Context.Guild.Id).modpackScan = setting;
+                Utils.SaveSettings();
                 await ReplyAsync("", false, embedMessage.Build());
             }
 
@@ -102,10 +102,10 @@ namespace AvaBot.Modules
             [RequireOwner]
             public async Task SetChehScanCommand(string value = null)
             {
-                var setting = Program.settings.Get(Context.Guild.Id).chehScan;
+                var setting = Utils.GetSettings(Context.Guild.Id).chehScan;
                 var embedMessage = SetBoolean("cheh", ref setting, value);
-                Program.settings.Get(Context.Guild.Id).chehScan = setting;
-                Program.settings.SaveSettings();
+                Utils.GetSettings(Context.Guild.Id).chehScan = setting;
+                Utils.SaveSettings();
                 await ReplyAsync("", false, embedMessage.Build());
             }
 
@@ -115,10 +115,10 @@ namespace AvaBot.Modules
             [RequireOwner]
             public async Task SetGf1ScanCommand(string value = null)
             {
-                var setting = Program.settings.Get(Context.Guild.Id).gf1Scan;
+                var setting = Utils.GetSettings(Context.Guild.Id).gf1Scan;
                 var embedMessage = SetBoolean("gf1", ref setting, value);
-                Program.settings.Get(Context.Guild.Id).gf1Scan = setting;
-                Program.settings.SaveSettings();
+                Utils.GetSettings(Context.Guild.Id).gf1Scan = setting;
+                Utils.SaveSettings();
                 await ReplyAsync("", false, embedMessage.Build());
             }
 
@@ -128,10 +128,10 @@ namespace AvaBot.Modules
             [RequireOwner]
             public async Task SetIneScanCommand(string value = null)
             {
-                var setting = Program.settings.Get(Context.Guild.Id).ineScan;
+                var setting = Utils.GetSettings(Context.Guild.Id).ineScan;
                 var embedMessage = SetBoolean("ine", ref setting, value);
-                Program.settings.Get(Context.Guild.Id).ineScan = setting;
-                Program.settings.SaveSettings();
+                Utils.GetSettings(Context.Guild.Id).ineScan = setting;
+                Utils.SaveSettings();
                 await ReplyAsync("", false, embedMessage.Build());
             }
 

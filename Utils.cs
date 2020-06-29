@@ -8,15 +8,15 @@ using System.Runtime.Serialization;
 namespace AvaBot
 {
     [Serializable]
-    public class Settings
+    public class Utils
     {
-        private string path;
-        private Dictionary<ulong, GuildSettings> guildSettings { get; set; }
+        private static string path;
+        private static Dictionary<ulong, GuildSettings> guildSettings { get; set; }
 
 
-        public Settings()
+        public static void Init()
         {
-            this.path = "settings.ser";
+            path = "data.ser";
             guildSettings = new Dictionary<ulong, GuildSettings>();
 
             try
@@ -24,7 +24,7 @@ namespace AvaBot
                 if (!File.Exists(path))
                 {
                     File.Create(path).Close();
-                    Console.WriteLine("Settings created");
+                    Console.WriteLine("Data file created");
                     SaveSettings();
                 }
                 else
@@ -36,27 +36,25 @@ namespace AvaBot
             }
         }
 
-        public void SaveSettings()
+        public static void SaveSettings()
         {
             var formatter = new BinaryFormatter();
             var stream = File.Open(path, FileMode.Create);
-            formatter.Serialize(stream, this);
+            formatter.Serialize(stream, guildSettings);
             Console.WriteLine("Settings saved");
             stream.Close();
         }
 
-        public void LoadSettings()
+        public static void LoadSettings()
         {
             var formatter = new BinaryFormatter();
             var stream = File.Open(path, FileMode.Open);
-            var settings = (Settings)formatter.Deserialize(stream);
+            guildSettings = (Dictionary<ulong, GuildSettings>)formatter.Deserialize(stream);
             Console.WriteLine("Settings loaded");
-
-            this.guildSettings = settings.guildSettings;
             stream.Close();
         }
 
-        public GuildSettings Get(ulong key)
+        public static GuildSettings GetSettings(ulong key)
         {
             GuildSettings value;
             if (guildSettings.TryGetValue(key, out value))
