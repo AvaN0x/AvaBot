@@ -8,6 +8,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Collections.Generic;
 using Microsoft.Extensions.Configuration;
+using System.Globalization;
 
 //#pragma warning disable CS1998
 namespace AvaBot.Modules
@@ -32,10 +33,15 @@ namespace AvaBot.Modules
                 return;
             }
             var dateEnd = DateTime.Now.AddMinutes(minutes);
+            var embedDesc = "";
+            if (Utils.GetSettings(Context.Guild.Id).IsMuted(user.Id))
+                embedDesc = user.Mention + " is now muted until " + dateEnd.ToString("F", DateTimeFormatInfo.InvariantInfo) + " (was " + Utils.GetSettings(Context.Guild.Id).muted[user.Id].ToString("F", DateTimeFormatInfo.InvariantInfo) + ")";
+            else
+                embedDesc = user.Mention + " is muted until " + dateEnd.ToString("F", DateTimeFormatInfo.InvariantInfo);
             Utils.GetSettings(Context.Guild.Id).muted[user.Id] = dateEnd;
             // TODO si changement, le préciser dans le message
             embedMessage = new EmbedBuilder()
-                .WithDescription(user.Mention + " is muted until " + dateEnd)
+                .WithDescription(embedDesc)
                 .WithColor(0, 255, 0);
             await ReplyAsync("", false, embedMessage.Build());
 
