@@ -25,10 +25,10 @@ namespace AvaBot
                 {
                     File.Create(path).Close();
                     Console.WriteLine("Data file created");
-                    SaveSettings();
+                    SaveData();
                 }
                 else
-                    LoadSettings();
+                    LoadData();
             }
             catch (Exception e) 
             { 
@@ -36,7 +36,7 @@ namespace AvaBot
             }
         }
 
-        public static void SaveSettings()
+        public static void SaveData()
         {
             var formatter = new BinaryFormatter();
             var stream = File.Open(path, FileMode.Create);
@@ -46,7 +46,7 @@ namespace AvaBot
             stream.Close();
         }
 
-        public static void LoadSettings()
+        public static void LoadData()
         {
             var formatter = new BinaryFormatter();
             var stream = File.Open(path, FileMode.Open);

@@ -65,7 +65,7 @@ namespace AvaBot.Modules
                     guildSettings.chehScan = flag;
                     guildSettings.gf1Scan = flag;
                     guildSettings.ineScan = flag;
-                    Utils.SaveSettings();
+                    Utils.SaveData();
                     EmbedBuilder embedMessage = new EmbedBuilder()
                         .WithDescription("Value of **modpack** set to *" + flag + "*" +
                             "\nValue of **cheh** set to *" + flag + "*" +
@@ -94,7 +94,7 @@ namespace AvaBot.Modules
                 var setting = Utils.GetSettings(Context.Guild.Id).modpackScan;
                 var embedMessage = SetBoolean("modpack", ref setting, value);
                 Utils.GetSettings(Context.Guild.Id).modpackScan = setting;
-                Utils.SaveSettings();
+                Utils.SaveData();
                 await ReplyAsync("", false, embedMessage.Build());
             }
 
@@ -106,7 +106,7 @@ namespace AvaBot.Modules
                 var setting = Utils.GetSettings(Context.Guild.Id).chehScan;
                 var embedMessage = SetBoolean("cheh", ref setting, value);
                 Utils.GetSettings(Context.Guild.Id).chehScan = setting;
-                Utils.SaveSettings();
+                Utils.SaveData();
                 await ReplyAsync("", false, embedMessage.Build());
             }
 
@@ -118,7 +118,7 @@ namespace AvaBot.Modules
                 var setting = Utils.GetSettings(Context.Guild.Id).gf1Scan;
                 var embedMessage = SetBoolean("gf1", ref setting, value);
                 Utils.GetSettings(Context.Guild.Id).gf1Scan = setting;
-                Utils.SaveSettings();
+                Utils.SaveData();
                 await ReplyAsync("", false, embedMessage.Build());
             }
 
@@ -130,7 +130,7 @@ namespace AvaBot.Modules
                 var setting = Utils.GetSettings(Context.Guild.Id).ineScan;
                 var embedMessage = SetBoolean("ine", ref setting, value);
                 Utils.GetSettings(Context.Guild.Id).ineScan = setting;
-                Utils.SaveSettings();
+                Utils.SaveData();
                 await ReplyAsync("", false, embedMessage.Build());
             }
 
@@ -144,7 +144,7 @@ namespace AvaBot.Modules
             Utils.GetSettings(Context.Guild.Id).admin_mute = setting;
             if (!setting)
                 Utils.GetSettings(Context.Guild.Id).muted.Clear();
-            Utils.SaveSettings();
+            Utils.SaveData();
             await ReplyAsync("", false, embedMessage.Build());
         }
 
