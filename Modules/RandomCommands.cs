@@ -15,9 +15,6 @@ namespace AvaBot.Modules
     // for commands to be available, and have the Context passed to them, we must inherit ModuleBase
     public class RandomCommands : ModuleBase
     {
-        [Command("createdat")]
-        public async Task CreatedAtCommand()
-            => await ReplyAsync(Context.User + " where created on " + Context.User.CreatedAt.ToString("F", DateTimeFormatInfo.InvariantInfo));
 
         [Command("me")]
         [Alias("info")]

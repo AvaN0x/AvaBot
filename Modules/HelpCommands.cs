@@ -35,7 +35,11 @@ namespace AvaBot.Modules
                     "\n• `ine` : react if the message contains a word that end with \"ine\"" +
                     "", false)
                 .AddField("User", "" +
-                    "• `createdat` : send the date when you created your Discord account" +
+                    "• `info [username]` : give information about the user, or yourself if there is no parameter" +
+                    "", false)
+                .AddField("Admin", "" +
+                    "• `mute [username] [duration in minutes]` : mute the user for the expected time (default 5 minutes)" +
+                    "\n• `unmute [username]` : unmute the user" +
                     "", false)
                 .WithFooter("github.com/AvaN0x", "https://avatars3.githubusercontent.com/u/27494805?s=460&v=4")
                 .WithColor(255, 241, 185);
@@ -55,11 +59,13 @@ namespace AvaBot.Modules
                     "\n`//s` -> Value of every command" +
                     "\n`//s scan` -> Value of every command in scan category" +
                     "\n`//s scan ine` -> Value of ine command" +
+                    "\n`//s mute` -> Value of mute //and unmute command" +
                     "", false)
                 .AddField("Edit value", "`//s [category / command] value`" +
                     "\nExample : " +
                     "\n`//s scan false` -> Value of every command in scan category set to false" +
                     "\n`//s scan ine false` -> Value of ine command set to true" +
+                    "\n`//s mute false` -> Value of mute and unmute command set to false" +
                     "", false)
                 .WithFooter("github.com/AvaN0x", "https://avatars3.githubusercontent.com/u/27494805?s=460&v=4")
                 .WithColor(255, 241, 185);

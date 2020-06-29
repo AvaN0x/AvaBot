@@ -35,7 +35,10 @@ namespace AvaBot.Modules
                 "\n• `ine` : *" + (guildSettings.ineScan ? "Activated" : "Disabled") + "*" +
                 "", false)
                 .AddField("User", "" +
-                    "• `createdat` : *Always*" +
+                    "• `info` : *Always*" +
+                    "", false)
+                .AddField("Admin", "" +
+                    "• `mute` : *" + (guildSettings.admin_mute ? "Activated" : "Disabled") + "*" +
                     "", false)
                 .WithFooter("github.com/AvaN0x", "https://avatars3.githubusercontent.com/u/27494805?s=460&v=4")
                 .WithColor(255, 241, 185);
