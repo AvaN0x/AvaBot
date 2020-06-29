@@ -39,7 +39,6 @@ namespace AvaBot.Modules
             else
                 embedDesc = user.Mention + " is muted until " + dateEnd.ToString("F", DateTimeFormatInfo.InvariantInfo);
             Utils.GetSettings(Context.Guild.Id).muted[user.Id] = dateEnd;
-            // TODO si changement, le préciser dans le message
             embedMessage = new EmbedBuilder()
                 .WithDescription(embedDesc)
                 .WithColor(0, 255, 0);
