@@ -86,7 +86,6 @@ namespace AvaBot.Modules
             // //s scan modpack --> display value
             // //s scan modpack bool --> set modpackScan to bool value
             [Command("modpack")]
-            [RequireOwner]
             public async Task SetModpackScanCommand(string value = null)
             {
                 var setting = Utils.GetSettings(Context.Guild.Id).modpackScan;
@@ -99,7 +98,6 @@ namespace AvaBot.Modules
             // //s scan cheh --> display value
             // //s scan cheh bool --> set chehScan to bool value
             [Command("cheh")]
-            [RequireOwner]
             public async Task SetChehScanCommand(string value = null)
             {
                 var setting = Utils.GetSettings(Context.Guild.Id).chehScan;
@@ -112,7 +110,6 @@ namespace AvaBot.Modules
             // //s scan gf1 --> display value
             // //s scan gf1 bool --> set gf1Scan to bool value
             [Command("gf1")]
-            [RequireOwner]
             public async Task SetGf1ScanCommand(string value = null)
             {
                 var setting = Utils.GetSettings(Context.Guild.Id).gf1Scan;
@@ -125,7 +122,6 @@ namespace AvaBot.Modules
             // //s scan ine --> display value
             // //s scan ine bool --> set ineScan to bool value
             [Command("ine")]
-            [RequireOwner]
             public async Task SetIneScanCommand(string value = null)
             {
                 var setting = Utils.GetSettings(Context.Guild.Id).ineScan;
