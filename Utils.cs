@@ -42,7 +42,6 @@ namespace AvaBot
             var stream = File.Open(path, FileMode.Create);
             formatter.Serialize(stream, guildSettings);
             Console.WriteLine("Settings saved");
-            // TODO fix muted which is not saved
             stream.Close();
         }
 
