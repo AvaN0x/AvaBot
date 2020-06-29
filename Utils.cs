@@ -95,12 +95,6 @@ namespace AvaBot
 
         }
 
-        public void SetMuted(ulong id, DateTime dateEnd)
-        {
-            muted[id] = dateEnd;
-
-        }
-
         public bool IsMuted(ulong id)
         {
             DateTime date;

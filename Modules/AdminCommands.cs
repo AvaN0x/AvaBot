@@ -32,7 +32,7 @@ namespace AvaBot.Modules
                 return;
             }
             var dateEnd = DateTime.Now.AddMinutes(minutes);
-            Utils.GetSettings(Context.Guild.Id).SetMuted(user.Id, dateEnd);
+            Utils.GetSettings(Context.Guild.Id).muted[user.Id] = dateEnd;
             // TODO si changement, le préciser dans le message
             embedMessage = new EmbedBuilder()
                 .WithDescription(user.Mention + " is muted until " + dateEnd)
