@@ -42,6 +42,7 @@ namespace AvaBot
             var stream = File.Open(path, FileMode.Create);
             formatter.Serialize(stream, guildSettings);
             Console.WriteLine("Settings saved");
+            // TODO fix muted which is not saved
             stream.Close();
         }
 
@@ -51,6 +52,7 @@ namespace AvaBot
             var stream = File.Open(path, FileMode.Open);
             guildSettings = (Dictionary<ulong, GuildSettings>)formatter.Deserialize(stream);
             Console.WriteLine("Settings loaded");
+
             stream.Close();
         }
 
@@ -71,18 +73,50 @@ namespace AvaBot
     [Serializable]
     public class GuildSettings
     {
+        public Dictionary<ulong, DateTime> muted { get; set; }
+
         public bool modpackScan { get; set; }
         public bool chehScan { get; set; }
         public bool gf1Scan { get; set; }
         public bool ineScan { get; set; }
 
+        public bool admin_mute { get; set; }
+
         public GuildSettings()
         {
+            this.muted = new Dictionary<ulong, DateTime>();
+
             this.modpackScan = true;
             this.chehScan = true;
             this.gf1Scan = true;
             this.ineScan = true;
 
+            this.admin_mute = true;
+
         }
+
+        public void SetMuted(ulong id, DateTime dateEnd)
+        {
+            muted[id] = dateEnd;
+
+        }
+
+        public bool IsMuted(ulong id)
+        {
+            DateTime date;
+            if (muted.TryGetValue(id, out date))
+            {
+                if (DateTime.Now > date)
+                {
+                    muted.Remove(id);
+                    return false;
+                }
+                else
+                    return true;
+            }
+            else
+                return false;
+        }
+
     }
 }

@@ -54,6 +54,16 @@ namespace AvaBot
             if (message.Source != MessageSource.User) 
                 return;
 
+            if(Utils.GetSettings(((SocketGuildChannel)message.Channel).Guild.Id).admin_mute &&
+                Utils.GetSettings(((SocketGuildChannel)message.Channel).Guild.Id).IsMuted(message.Author.Id))
+            {
+                await message.Author.SendMessageAsync("Your message go deleted on *" + ((SocketGuildChannel)message.Channel).Guild.Name + "* : " + "\n> " + message.Content);
+                await message.DeleteAsync();
+                if (((SocketGuildChannel)message.Channel).Guild.OwnerId != message.Author.Id) // so the owner can unmute himself
+                    return;
+            }
+
+
             // sets the argument position away from the prefix we set
             var argPos = 0;
 
@@ -61,9 +71,10 @@ namespace AvaBot
             string prefix = _config["Prefix"];
 
             // determine if the message has a valid prefix, and adjust argPos based on prefix
-            if (!(message.HasStringPrefix(prefix, ref argPos))) 
+            if (!(message.HasStringPrefix(prefix, ref argPos)))
             {
-                await TextObservation.Scan(message);
+                if (message.Channel is SocketGuildChannel channel)
+                    await TextObservation.Scan(message);
                 return;
             }
            

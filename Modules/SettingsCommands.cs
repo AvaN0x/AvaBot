@@ -133,7 +133,17 @@ namespace AvaBot.Modules
 
         }
 
-
+        [Command("mute")]
+        public async Task MuteCommand(string value = null)
+        {
+            var setting = Utils.GetSettings(Context.Guild.Id).admin_mute;
+            var embedMessage = SetBoolean("Admin mute", ref setting, value);
+            Utils.GetSettings(Context.Guild.Id).admin_mute = setting;
+            if (!setting)
+                Utils.GetSettings(Context.Guild.Id).muted.Clear();
+            Utils.SaveSettings();
+            await ReplyAsync("", false, embedMessage.Build());
+        }
 
         public static EmbedBuilder SetBoolean(string settingName, ref bool setting, string value)
         {

@@ -14,8 +14,6 @@ namespace AvaBot
     {
         public static async Task Scan(SocketUserMessage message)
         {
-            if (!(message.Channel is SocketGuildChannel channel))
-                return;
             var settings = Utils.GetSettings(((SocketGuildChannel)message.Channel).Guild.Id);
             var msg = message.Content.ToLower();
             // modpack case
@@ -36,7 +34,6 @@ namespace AvaBot
                     .WithColor(255, 241, 185);
 
                 await message.Channel.SendMessageAsync("Non toi cheh ! " + message.Author.Mention, false, embedMessage.Build());
-
                 await message.AddReactionAsync(new Emoji("❌"));
                 return;
             }
