@@ -74,7 +74,10 @@ namespace AvaBot
             if (!(message.HasStringPrefix(prefix, ref argPos)))
             {
                 if (message.Channel is SocketGuildChannel channel)
-                    await TextObservation.Scan(message);
+                {
+                    await TextObservation.ScanContent(message);
+                    await TextObservation.ScanUser(message);
+                }
                 return;
             }
            

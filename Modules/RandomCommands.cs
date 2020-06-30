@@ -68,7 +68,7 @@ namespace AvaBot.Modules
             await ReplyAsync(DateTime.Now.ToString("T") + " : Date set to " + date.ToString("T"));
             while (DateTime.Now <= date)
                 await Task.Delay(1);
-            await ReplyAsync(DateTime.Now.ToString("T") + " : " + Context.User.Mention + " •a devrait faire " + duree + " secondes");
+            await ReplyAsync(DateTime.Now.ToString("T") + " : " + Context.User.Mention + " ça devrait faire " + duree + " secondes");
         }
 
         //[Command("test")]
@@ -79,6 +79,15 @@ namespace AvaBot.Modules
 
         //    //await ((SocketGuild)Context.Guild).GetUser(261255005162438656).SendMessageAsync("GF1 sacam");
         //    //await Context.User.SendMessageAsync("Quoi de pire qu'un ping? Un mp.");
+            
+        //    //var emote = (Emote)Context.Guild.Emotes.FirstOrDefault(e => e.Name.ToLower() == Context.User.Username.ToLower());
+        //    //if (emote != null)
+        //    //    await Context.Message.AddReactionAsync(emote);
+
+
+        //    //var emote = Emote.Parse("<:boulax:727532649215819806>");
+        //    //await Context.Message.AddReactionAsync(emote);
+
         //}
 
     }

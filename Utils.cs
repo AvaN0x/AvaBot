@@ -96,6 +96,8 @@ namespace AvaBot
         public bool gf1Scan { get; set; }
         public bool ineScan { get; set; }
 
+        public bool reactionToUsername { get; set; }
+
         public bool admin_mute { get; set; }
 
         public GuildSettings()
@@ -106,6 +108,8 @@ namespace AvaBot
             this.chehScan = true;
             this.gf1Scan = true;
             this.ineScan = true;
+
+            this.reactionToUsername = false;
 
             this.admin_mute = true;
 
@@ -128,5 +132,12 @@ namespace AvaBot
                 return false;
         }
 
+
+
+        [OnDeserializing]
+        private void SetMissingDefault(StreamingContext sc)
+        {
+            reactionToUsername = false;
+        }
     }
 }

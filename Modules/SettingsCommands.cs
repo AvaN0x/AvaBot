@@ -33,6 +33,7 @@ namespace AvaBot.Modules
                 "\n• `cheh` : *" + (guildSettings.chehScan ? "Activated" : "Disabled") + "*" +
                 "\n• `gf1` : *" + (guildSettings.gf1Scan ? "Activated" : "Disabled") + "*" +
                 "\n• `ine` : *" + (guildSettings.ineScan ? "Activated" : "Disabled") + "*" +
+                "\n• `reactuser` : *" + (guildSettings.reactionToUsername ? "Activated" : "Disabled") + "*" +
                 "", false)
                 .AddField("User", "" +
                     "• `info` : *Always*" +
@@ -65,22 +66,29 @@ namespace AvaBot.Modules
                     guildSettings.chehScan = flag;
                     guildSettings.gf1Scan = flag;
                     guildSettings.ineScan = flag;
+                    guildSettings.reactionToUsername = flag;
                     Utils.SaveData();
                     EmbedBuilder embedMessage = new EmbedBuilder()
-                        .WithDescription("Value of **modpack** set to *" + flag + "*" +
+                        .WithDescription("" + 
+                            "Value of **modpack** set to *" + flag + "*" +
                             "\nValue of **cheh** set to *" + flag + "*" +
                             "\nValue of **gf1** set to *" + flag + "*" +
-                            "\nValue of **ine** set to *" + flag + "*")
+                            "\nValue of **ine** set to *" + flag + "*" +
+                            "\nValue of **reactuser** set to *" + flag + "*" +
+                            "")
                         .WithColor(255, 241, 185);
                     await ReplyAsync("", false, embedMessage.Build());
                 }
                 else
                 {
                     EmbedBuilder embedMessage = new EmbedBuilder()
-                        .WithDescription("Value of **modpack** is *" + guildSettings.modpackScan + "*" +
+                        .WithDescription("" + 
+                            "Value of **modpack** is *" + guildSettings.modpackScan + "*" +
                             "\nValue of **cheh** is *" + guildSettings.chehScan + "*" +
                             "\nValue of **gf1** is *" + guildSettings.gf1Scan + "*" +
-                            "\nValue of **ine** is *" + guildSettings.ineScan + "*")
+                            "\nValue of **ine** is *" + guildSettings.ineScan + "*" +
+                            "\nValue of **reactuser** is *" + guildSettings.reactionToUsername + "*" +
+                            "")
                         .WithColor(255, 241, 185);
                     await ReplyAsync("", false, embedMessage.Build());
                 }
@@ -130,6 +138,16 @@ namespace AvaBot.Modules
                 var setting = Utils.GetSettings(Context.Guild.Id).ineScan;
                 var embedMessage = SetBoolean("ine", ref setting, value);
                 Utils.GetSettings(Context.Guild.Id).ineScan = setting;
+                Utils.SaveData();
+                await ReplyAsync("", false, embedMessage.Build());
+            }
+
+            [Command("reactuser")]
+            public async Task SetReactUserCommand(string value = null)
+            {
+                var setting = Utils.GetSettings(Context.Guild.Id).reactionToUsername;
+                var embedMessage = SetBoolean("reactUser", ref setting, value);
+                Utils.GetSettings(Context.Guild.Id).reactionToUsername = setting;
                 Utils.SaveData();
                 await ReplyAsync("", false, embedMessage.Build());
             }

@@ -12,7 +12,7 @@ namespace AvaBot
 {
     static class TextObservation
     {
-        public static async Task Scan(SocketUserMessage message)
+        public static async Task ScanContent(SocketUserMessage message)
         {
             var settings = Utils.GetSettings(((SocketGuildChannel)message.Channel).Guild.Id);
             var msg = message.Content.ToLower();
@@ -59,5 +59,22 @@ namespace AvaBot
                 }
             }
         }
+
+        public static async Task ScanUser(SocketUserMessage message)
+        {
+            var settings = Utils.GetSettings(((SocketGuildChannel)message.Channel).Guild.Id);
+
+            // modpack case
+            if (settings.reactionToUsername)
+            {
+                var username = message.Author.Username.ToLower().Replace(" ", "");
+                var emote = (Emote)((SocketGuildChannel)message.Channel).Guild.Emotes.FirstOrDefault(e => e.Name.ToLower() == username);
+                if (emote != null)
+                    await message.AddReactionAsync(emote);
+                return;
+            }
+
+        }
+
     }
 }
