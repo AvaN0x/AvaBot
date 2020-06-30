@@ -66,6 +66,7 @@ namespace AvaBot
         private Task ReadyAsync()
         {
             Utils.LogAsync("Connected as " + _client.CurrentUser);
+            Utils.LogAsync("We are on " + _client.Guilds.Count + " servers");
             return Task.CompletedTask;
         }
 
