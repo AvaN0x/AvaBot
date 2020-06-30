@@ -89,7 +89,7 @@ namespace AvaBot
             // if a command isn't found, log that info to console and exit this method
             if (!command.IsSpecified)
             {
-                Console.WriteLine($"Command failed to execute for [{context.User}] <-> [{result.ErrorReason}]!");
+                Utils.LogAsync($"Command failed to execute for [{context.User}] <-> [{result.ErrorReason}]!", "Error");
                 return;
             }
                 
@@ -97,13 +97,13 @@ namespace AvaBot
             // log success to the console and exit this method
             if (result.IsSuccess)
             {
-                Console.WriteLine($"Command [{command.Value.Name}] executed for -> [{context.User}]");
+                Utils.LogAsync($"Command [{command.Value.Name}] executed for -> [{context.User}]");
                 return;
             }
 
 
             // failure scenario, let's let the user know
-            Console.WriteLine($"{context.User} something went wrong -> [{result}]!");
+            Utils.LogAsync($"{context.User} something went wrong -> [{result}]!", "Error");
             EmbedBuilder embedMessage = new EmbedBuilder()
                 .WithDescription("This command does not exist.")
                 .WithColor(255, 0, 0);

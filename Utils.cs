@@ -4,6 +4,8 @@ using System.Text;
 using System.IO;
 using System.Runtime.Serialization.Formatters.Binary;
 using System.Runtime.Serialization;
+using System.Threading.Tasks;
+using Discord;
 
 namespace AvaBot
 {
@@ -41,7 +43,7 @@ namespace AvaBot
             var formatter = new BinaryFormatter();
             var stream = File.Open(path, FileMode.Create);
             formatter.Serialize(stream, guildSettings);
-            Console.WriteLine("Settings saved");
+            Utils.LogAsync("Data saved");
             stream.Close();
         }
 
@@ -50,7 +52,7 @@ namespace AvaBot
             var formatter = new BinaryFormatter();
             var stream = File.Open(path, FileMode.Open);
             guildSettings = (Dictionary<ulong, GuildSettings>)formatter.Deserialize(stream);
-            Console.WriteLine("Settings loaded");
+            Utils.LogAsync("Data loaded");
 
             stream.Close();
         }
@@ -63,10 +65,25 @@ namespace AvaBot
             else
             {
                 guildSettings.Add(key, new GuildSettings());
-                Console.WriteLine("Add settings for " + key);
+                Utils.LogAsync("Add settings for " + key);
                 return guildSettings[key];
             }
         }
+
+        public static Task LogAsync(LogMessage log)
+        {
+            //Console.WriteLine(log.ToString());
+            //Console.WriteLine("[" + DateTime.Now.ToString("HH:mm:ss:fff") + " " + log.Severity + "] " + log.Source + " : " + log.Message + (log.Exception != null ? "\n\t" + log.Exception : ""));
+            LogAsync(log.Source + " : " + log.Message + (log.Exception != null ? "\n\t" + log.Exception : ""), log.Severity.ToString());
+            return Task.CompletedTask;
+        }
+
+        public static Task LogAsync(String message, string severity = "Info")
+        {
+            Console.WriteLine("[" + DateTime.Now.ToString("HH:mm:ss:fff") + " " + severity + "] " + message);
+            return Task.CompletedTask;
+        }
+
     }
 
     [Serializable]

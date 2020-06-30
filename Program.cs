@@ -43,9 +43,9 @@ namespace AvaBot
                 _client = client;
 
                 // setup logging and the ready event
-                client.Log += LogAsync;
+                client.Log += Utils.LogAsync;
                 client.Ready += ReadyAsync;
-                services.GetRequiredService<CommandService>().Log += LogAsync;
+                services.GetRequiredService<CommandService>().Log += Utils.LogAsync;
 
                 // this is where we get the Token value from the configuration file, and start the bot
                 await client.LoginAsync(TokenType.Bot, _config["Token"]);
@@ -62,15 +62,10 @@ namespace AvaBot
             }
         }
 
-        private Task LogAsync(LogMessage log)
-        {
-            Console.WriteLine(log.ToString());
-            return Task.CompletedTask;
-        }
 
         private Task ReadyAsync()
         {
-            Console.WriteLine("Connected as " + _client.CurrentUser);
+            Utils.LogAsync("Connected as " + _client.CurrentUser);
             return Task.CompletedTask;
         }
 
