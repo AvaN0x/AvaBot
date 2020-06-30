@@ -92,7 +92,7 @@ namespace AvaBot
             // if a command isn't found, log that info to console and exit this method
             if (!command.IsSpecified)
             {
-                await Utils.LogAsync($"Command failed to execute for [{context.User}] <-> [{result.ErrorReason}]!", "Error");
+                await Utils.LogAsync($"Command failed to execute for [{context.User}] on [{context.Guild.Name}] <-> [{result.ErrorReason}]!", "Error");
                 return;
             }
                 
@@ -100,7 +100,7 @@ namespace AvaBot
             // log success to the console and exit this method
             if (result.IsSuccess)
             {
-                await Utils.LogAsync($"Command [{command.Value.Name}] executed for -> [{context.User}]");
+                await Utils.LogAsync($"Command [{command.Value.Name}] executed for [{context.User}] on [{context.Guild.Name}]");
                 return;
             }
 
