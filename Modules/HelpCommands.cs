@@ -29,7 +29,8 @@ namespace AvaBot.Modules
                     "• `github` or `avan0x` : send informations about the bot owner" +
                     "", false)
                 .AddField("Text scan", "" +
-                    "• `modpack` : answer if the message contains \"modpack\" or any other writing of this" +
+                    "Those are not commands, they just scan every message posted." + 
+                    "\n• `modpack` : answer if the message contains \"modpack\" or any other writing of this" +
                     "\n• `cheh` : answer if the message contains \"cheh\"" +
                     "\n• `gf1` : answer if the message contains \"gf1\" or \"j'ai faim\"" +
                     "\n• `ine` : answer if the message contains a word that end with \"ine\"" +
