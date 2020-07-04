@@ -162,6 +162,7 @@ namespace AvaBot.Modules
             {
                 focused.SetValue(settings, flag);
                 await Utils.LogAsync("Value of `" + settingName + "` set to `" + flag + "` on `" + context.Guild.Name + "`");
+                // TODO save only if different of actual value
                 Utils.SaveData();
                 embedMessage = new EmbedBuilder()
                     .WithDescription("Value of **" + settingName + "** set to *" + flag + "*")
