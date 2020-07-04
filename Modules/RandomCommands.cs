@@ -16,9 +16,9 @@ namespace AvaBot.Modules
     public class RandomCommands : ModuleBase
     {
 
-        [Command("me")]
-        [Alias("info")]
-        public async Task MeCommand(SocketGuildUser user = null)
+        [Command("info")]
+        [Alias("me")]
+        public async Task InfoCommand(SocketGuildUser user = null)
         {
             if (user == null)
                 user = (SocketGuildUser)Context.User;
@@ -28,14 +28,14 @@ namespace AvaBot.Modules
                 .AddField("Global", "" +
                     "• ToString() : *" + user.ToString() + "*" + 
                     "\n• CreatedAt : *" + user.CreatedAt.ToString("F", DateTimeFormatInfo.InvariantInfo) + "*" + 
-                    "\n• Activity : *" + user.Activity + "*" + 
+                    "\n• Activity : *" + user.Activity + "*" + // TODO show only if the value is not null
                     "\n• Status : *" + user.Status + "*" + 
                     "\n• GetDefaultAvatarUrl() : *[link](" + user.GetDefaultAvatarUrl() + ")*" + 
                     "\n• GetAvatarUrl() : *[link](" + user.GetAvatarUrl() + ")*" + 
                     "", false)
                 .AddField("Guild", "" +
                     "\n• Guild : *" + user.Guild + "*" + 
-                    "\n• Nickname : *" + user.Nickname + "*" + 
+                    "\n• Nickname : *" + user.Nickname + "*" + // TODO show only if the value is not null
                     "\n• JoinedAt : *" + ((DateTimeOffset) user.JoinedAt).ToString("F", DateTimeFormatInfo.InvariantInfo) + "*" + 
                     "", false)
                 .WithFooter("github.com/AvaN0x", "https://avatars3.githubusercontent.com/u/27494805?s=460&v=4")
