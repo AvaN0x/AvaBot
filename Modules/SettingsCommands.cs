@@ -3,6 +3,7 @@ using Discord.Net;
 using Discord.WebSocket;
 using Discord.Commands;
 using System;
+using System.Reflection;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -52,12 +53,12 @@ namespace AvaBot.Modules
         [Alias("scan")]
         public class SettingsCommands_Scan : ModuleBase
         {
-            // TODO need optimisation, reflection?! :)
             // //s scan --> display values
             // //s scan bool --> set all to bool value
             [Command]
             public async Task SetTextScanCommand(string value = null)
             {
+                //TODO add a method to change a full category ( foreach( var foo in foos.Where()) )
                 var guildSettings = Utils.GetSettings(Context.Guild.Id);
                 bool flag;
                 if (Boolean.TryParse(value, out flag))
@@ -67,6 +68,8 @@ namespace AvaBot.Modules
                     guildSettings.gf1Scan = flag;
                     guildSettings.ineScan = flag;
                     guildSettings.reactionToUsername = flag;
+                    await Utils.LogAsync("Value of all scan settings set to `" + flag + "` on `" + Context.Guild.Name + "`");
+
                     Utils.SaveData();
                     EmbedBuilder embedMessage = new EmbedBuilder()
                         .WithDescription("" + 
@@ -98,81 +101,68 @@ namespace AvaBot.Modules
             // //s scan modpack bool --> set modpackScan to bool value
             [Command("modpack")]
             public async Task SetModpackScanCommand(string value = null)
-            {
-                var setting = Utils.GetSettings(Context.Guild.Id).modpackScan;
-                var embedMessage = SetBoolean("modpack", ref setting, value);
-                Utils.GetSettings(Context.Guild.Id).modpackScan = setting;
-                Utils.SaveData();
-                await ReplyAsync("", false, embedMessage.Build());
-            }
+                => await SetBoolean("modpackScan", Utils.GetSettings(Context.Guild.Id), value, Context);
 
             // //s scan cheh --> display value
             // //s scan cheh bool --> set chehScan to bool value
             [Command("cheh")]
             public async Task SetChehScanCommand(string value = null)
-            {
-                var setting = Utils.GetSettings(Context.Guild.Id).chehScan;
-                var embedMessage = SetBoolean("cheh", ref setting, value);
-                Utils.GetSettings(Context.Guild.Id).chehScan = setting;
-                Utils.SaveData();
-                await ReplyAsync("", false, embedMessage.Build());
-            }
+                => await SetBoolean("chehScan", Utils.GetSettings(Context.Guild.Id), value, Context);
 
-            // //s scan gf1 --> display value
-            // //s scan gf1 bool --> set gf1Scan to bool value
+            //// //s scan gf1 --> display value
+            //// //s scan gf1 bool --> set gf1Scan to bool value
             [Command("gf1")]
             public async Task SetGf1ScanCommand(string value = null)
-            {
-                var setting = Utils.GetSettings(Context.Guild.Id).gf1Scan;
-                var embedMessage = SetBoolean("gf1", ref setting, value);
-                Utils.GetSettings(Context.Guild.Id).gf1Scan = setting;
-                Utils.SaveData();
-                await ReplyAsync("", false, embedMessage.Build());
-            }
+                => await SetBoolean("gf1Scan", Utils.GetSettings(Context.Guild.Id), value, Context);
 
             // //s scan ine --> display value
             // //s scan ine bool --> set ineScan to bool value
             [Command("ine")]
             public async Task SetIneScanCommand(string value = null)
-            {
-                var setting = Utils.GetSettings(Context.Guild.Id).ineScan;
-                var embedMessage = SetBoolean("ine", ref setting, value);
-                Utils.GetSettings(Context.Guild.Id).ineScan = setting;
-                Utils.SaveData();
-                await ReplyAsync("", false, embedMessage.Build());
-            }
+                => await SetBoolean("ineScan", Utils.GetSettings(Context.Guild.Id), value, Context);
 
+            // //s scan reactuser --> display value
+            // //s scan reactuser bool --> set reactionToUsername to bool value
             [Command("reactuser")]
             public async Task SetReactUserCommand(string value = null)
-            {
-                var setting = Utils.GetSettings(Context.Guild.Id).reactionToUsername;
-                var embedMessage = SetBoolean("reactUser", ref setting, value);
-                Utils.GetSettings(Context.Guild.Id).reactionToUsername = setting;
-                Utils.SaveData();
-                await ReplyAsync("", false, embedMessage.Build());
-            }
-
+                => await SetBoolean("reactionToUsername", Utils.GetSettings(Context.Guild.Id), value, Context);
         }
 
         [Command("mute")]
         public async Task MuteCommand(string value = null)
         {
-            var setting = Utils.GetSettings(Context.Guild.Id).admin_mute;
-            var embedMessage = SetBoolean("Admin mute", ref setting, value);
-            Utils.GetSettings(Context.Guild.Id).admin_mute = setting;
-            if (!setting)
+            bool flag;
+            if (Boolean.TryParse(value, out flag) && !flag)
+            {
                 Utils.GetSettings(Context.Guild.Id).muted.Clear();
-            Utils.SaveData();
-            await ReplyAsync("", false, embedMessage.Build());
+                await Utils.LogAsync("Every muted got unmuted on `" + Context.Guild.Name + "`");
+            }
+            await SetBoolean("reactionToUsername", Utils.GetSettings(Context.Guild.Id), value, Context);
         }
 
-        public static EmbedBuilder SetBoolean(string settingName, ref bool setting, string value)
+        public static async Task SetBoolean(string settingName, GuildSettings settings, string value, ICommandContext context)
         {
             EmbedBuilder embedMessage;
             bool flag;
+            var type = settings.GetType();
+            var props = type.GetProperties();
+            var focused = props.FirstOrDefault(prop => prop.Name == settingName);
+
+            if (focused == null)
+            {
+                await Utils.LogAsync("There's no property named `" + settingName + "` in `" + type.Name + "`", "ERROR");
+                embedMessage = new EmbedBuilder()
+                    .WithDescription("There's an error with this property, you can create an issue on [github](https://github.com/AvaN0x/AvaBot/issues) or contact me on Discord at AvaN0x#6348.")
+                    .WithColor(255, 0, 0);
+                await context.Channel.SendMessageAsync("", false, embedMessage.Build());
+                return;
+            }
+
             if (Boolean.TryParse(value, out flag))
             {
-                setting = flag;
+                focused.SetValue(settings, flag);
+                await Utils.LogAsync("Value of `" + settingName + "` set to `" + flag + "` on `" + context.Guild.Name + "`");
+                Utils.SaveData();
                 embedMessage = new EmbedBuilder()
                     .WithDescription("Value of **" + settingName + "** set to *" + flag + "*")
                     .WithColor(255, 241, 185);
@@ -180,10 +170,10 @@ namespace AvaBot.Modules
             else
             {
                 embedMessage = new EmbedBuilder()
-                    .WithDescription("Value of **" + settingName + "** is *" + setting + "*")
+                    .WithDescription("Value of **" + settingName + "** is *" + focused.GetValue(settings) + "*")
                     .WithColor(255, 241, 185);
             }
-            return embedMessage;
+            await context.Channel.SendMessageAsync("", false, embedMessage.Build());
         }
     }
 }
