@@ -26,7 +26,7 @@ namespace AvaBot
                 if (!File.Exists(path))
                 {
                     File.Create(path).Close();
-                    Console.WriteLine("Data file created");
+                    Utils.LogAsync("Data file created");
                     SaveData();
                 }
                 else
