@@ -59,6 +59,7 @@ namespace AvaBot
             {
                 await message.Author.SendMessageAsync("Your message go deleted on *" + ((SocketGuildChannel)message.Channel).Guild.Name + "* : " + "\n> " + message.Content);
                 await message.DeleteAsync();
+                await Utils.LogAsync("Message from " + message.Author + " got removed on `" + ((SocketGuildChannel)message.Channel).Guild.Name + "`");
                 if (((SocketGuildChannel)message.Channel).Guild.OwnerId != message.Author.Id) // so the owner can unmute himself
                     return;
             }
@@ -106,9 +107,9 @@ namespace AvaBot
 
 
             // failure scenario, let's let the user know
-            await Utils.LogAsync($"{context.User} something went wrong -> [{result}]!", "Error");
+            await Utils.LogAsync($"{context.User} something went wrong : [{result}]!", "Error");
             EmbedBuilder embedMessage = new EmbedBuilder()
-                .WithDescription("This command does not exist.")
+                .WithDescription("This command does not exist or you can't use it.")
                 .WithColor(255, 0, 0);
             await context.Channel.SendMessageAsync("", false, embedMessage.Build());
         }        
