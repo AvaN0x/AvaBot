@@ -49,7 +49,7 @@ namespace AvaBot
             // -ine case
             if (settings.ineScan)
             {
-                var ineList = Regex.Matches(msg, "[a-zA-ZÀ-ÿ]+ine").Cast<Match>().Select(m => m.Value).ToList();
+                var ineList = Regex.Matches(msg, "[a-zA-ZÀ-ÿ]+(ine)$").Cast<Match>().Select(m => m.Value).ToList();
                 int maxPerMsg = 10;
                 if (ineList.Count() > 0)
                 {
