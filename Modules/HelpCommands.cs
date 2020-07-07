@@ -33,7 +33,7 @@ namespace AvaBot.Modules
                     "\n• `cheh` : answer if the message contains \"cheh\"" +
                     "\n• `gf1` : answer if the message contains \"gf1\" or \"j'ai faim\"" +
                     "\n• `ine` : answer if the message contains a word that end with \"ine\"" +
-                    "\n• `reactuser` : react if an emote exists with the same name as the user" +
+                    "\n• `reacttouser` : react if an emote exists with the same name as the user" +
                     "", false)
                 .AddField("User", "" +
                     "• `info [username]` : give information about the user, or yourself if there is no parameter" +

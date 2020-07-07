@@ -73,14 +73,13 @@ namespace AvaBot
 
         public static Task LogAsync(LogMessage log)
         {
-            //Console.WriteLine(log.ToString());
-            //Console.WriteLine("[" + DateTime.Now.ToString("HH:mm:ss:fff") + " " + log.Severity + "] " + log.Source + " : " + log.Message + (log.Exception != null ? "\n\t" + log.Exception : ""));
             LogAsync(log.Source + " : " + log.Message + (log.Exception != null ? "\n\t" + log.Exception : ""), log.Severity.ToString());
             return Task.CompletedTask;
         }
 
         public static Task LogAsync(String message, string severity = "Info")
         {
+            //TODO log to file
             Console.WriteLine("[" + DateTime.Now.ToString("HH:mm:ss:fff") + " " + severity + "] " + message);
             return Task.CompletedTask;
         }

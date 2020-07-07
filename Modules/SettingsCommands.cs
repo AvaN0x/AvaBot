@@ -9,6 +9,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Collections.Generic;
 using Microsoft.Extensions.Configuration;
+using System.Text.RegularExpressions;
 
 namespace AvaBot.Modules
 {
@@ -22,24 +23,32 @@ namespace AvaBot.Modules
         [Command]
         public async Task AllValueCommand()
         {
-            var guildSettings = Utils.GetSettings(Context.Guild.Id);
+            var settings = Utils.GetSettings(Context.Guild.Id);
+
+            var type = settings.GetType();
+            var props = type.GetProperties();
+            var scanText = "";
+            foreach (var prop in props.Where(prop => new Regex("(Scan)$").IsMatch(prop.Name)))
+            {
+                var value = prop.GetValue(settings);
+                if (value is bool boolValue)
+                    scanText += "• `" + prop.Name[0..^4] + "` : *" + (boolValue ? "Activated" : "Disabled") + "*\n";
+                else
+                    scanText += "• `" + prop.Name[0..^4] + "` : *" + value + "*\n";
+            }
+
             EmbedBuilder embedMessage = new EmbedBuilder()
                 .WithTitle("Commands states")
                 .WithDescription("*Always* mean that the value cannot be changed.")
                 .AddField("Randoms", "" +
                     "• `github` or `avan0x` : *Always*" +
                     "", false)
-                .AddField("Text scan", "" +
-                "• `cheh` : *" + (guildSettings.chehScan ? "Activated" : "Disabled") + "*" +
-                "\n• `gf1` : *" + (guildSettings.gf1Scan ? "Activated" : "Disabled") + "*" +
-                "\n• `ine` : *" + (guildSettings.ineScan ? "Activated" : "Disabled") + "*" +
-                "\n• `reactuser` : *" + (guildSettings.reactToUserScan ? "Activated" : "Disabled") + "*" +
-                "", false)
+                .AddField("Text scan", scanText, false)
                 .AddField("User", "" +
                     "• `info` : *Always*" +
                     "", false)
                 .AddField("Admin", "" +
-                    "• `mute` : *" + (guildSettings.admin_mute ? "Activated" : "Disabled") + "*" +
+                    "• `mute` : *" + (settings.admin_mute ? "Activated" : "Disabled") + "*" +
                     "", false)
                 .WithFooter("github.com/AvaN0x", "https://avatars3.githubusercontent.com/u/27494805?s=460&v=4")
                 .WithColor(255, 241, 185);
@@ -115,7 +124,7 @@ namespace AvaBot.Modules
 
             // //s scan reactuser --> display value
             // //s scan reactuser bool --> set reactionToUsername to bool value
-            [Command("reactuser")]
+            [Command("reacttouser")]
             public async Task SetReactUserCommand(string value = null)
                 => await SetObject("reactToUserScan", bool.TryParse(value, out var flag), flag, Context);
         }
