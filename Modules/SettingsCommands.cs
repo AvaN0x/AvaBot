@@ -157,6 +157,7 @@ namespace AvaBot.Modules
         }
 
         public static async Task SetObject(string settingName, bool tryparse, object flag, ICommandContext context)
+        // use like that : await SetObject(settingName, bool.TryParse(value, out var flag), flag, Context);
         {
             var settings = Utils.GetSettings(context.Guild.Id);
             EmbedBuilder embedMessage;
