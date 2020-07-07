@@ -66,40 +66,40 @@ namespace AvaBot.Modules
             [Command]
             public async Task SetTextScanCommand(string value = null)
             {
-                //TODO add a method to change a full category ( foreach( var foo in foos.Where()) )
-                var guildSettings = Utils.GetSettings(Context.Guild.Id);
+                var settings = Utils.GetSettings(Context.Guild.Id);
+
+                var type = settings.GetType();
+                var props = type.GetProperties();
+                var scanText = "";
+
                 bool flag;
                 if (Boolean.TryParse(value, out flag))
                 {
-                    guildSettings.chehScan = flag;
-                    guildSettings.gf1Scan = flag;
-                    guildSettings.ineScan = flag;
-                    guildSettings.reactToUserScan = flag;
-                    await Utils.LogAsync("Value of all scan settings set to `" + flag + "` on `" + Context.Guild.Name + "`");
-
+                    foreach (var prop in props.Where(prop => new Regex("(Scan)$").IsMatch(prop.Name)))
+                    {
+                        var propValue = prop.GetValue(settings);
+                        if (propValue is bool)
+                        {
+                            prop.SetValue(settings, flag);
+                            scanText += "• Value of **" + prop.Name[0..^4] + "** set to *" + flag + "*\n";
+                            await Utils.LogAsync("Value of `" + prop.Name[0..^4] + "` set to `" + flag + "` on `" + Context.Guild.Name + "`");
+                        } else
+                            scanText += "• Value of **" + prop.Name[0..^4] + "** is still *" + propValue + "*\n";
+                    }
                     Utils.SaveData();
-                    EmbedBuilder embedMessage = new EmbedBuilder()
-                        .WithDescription("" + 
-                            "Value of **cheh** set to *" + flag + "*" +
-                            "\nValue of **gf1** set to *" + flag + "*" +
-                            "\nValue of **ine** set to *" + flag + "*" +
-                            "\nValue of **reactuser** set to *" + flag + "*" +
-                            "")
-                        .WithColor(255, 241, 185);
-                    await ReplyAsync("", false, embedMessage.Build());
                 }
                 else
                 {
-                    EmbedBuilder embedMessage = new EmbedBuilder()
-                        .WithDescription("" + 
-                            "Value of **cheh** is *" + guildSettings.chehScan + "*" +
-                            "\nValue of **gf1** is *" + guildSettings.gf1Scan + "*" +
-                            "\nValue of **ine** is *" + guildSettings.ineScan + "*" +
-                            "\nValue of **reactuser** is *" + guildSettings.reactToUserScan + "*" +
-                            "")
-                        .WithColor(255, 241, 185);
-                    await ReplyAsync("", false, embedMessage.Build());
+                    foreach (var prop in props.Where(prop => new Regex("(Scan)$").IsMatch(prop.Name)))
+                    {
+                        scanText += "• Value of **" + prop.Name[0..^4] + "** is *" + prop.GetValue(settings) + "*\n";
+                    }
                 }
+                EmbedBuilder embedMessage = new EmbedBuilder()
+                    .WithDescription(scanText)
+                    .WithColor(255, 241, 185);
+                await ReplyAsync("", false, embedMessage.Build());
+
             }
 
             // //s scan cheh --> display value
@@ -125,6 +125,7 @@ namespace AvaBot.Modules
             // //s scan reactuser --> display value
             // //s scan reactuser bool --> set reactionToUsername to bool value
             [Command("reacttouser")]
+            [Alias("reactuser")]
             public async Task SetReactUserCommand(string value = null)
                 => await SetObject("reactToUserScan", bool.TryParse(value, out var flag), flag, Context);
         }
