@@ -41,6 +41,7 @@ namespace AvaBot.Modules
                 .AddField("Admin", "" +
                     "• `mute [username] [duration in minutes]` : mute the user for the expected time (default 5 minutes)" +
                     "\n• `unmute [username]` : unmute the user" +
+                    "\n• `adminrole [role]` : set the needed role to access setting and admin commands" +
                     "", false)
                 .WithFooter("github.com/AvaN0x", "https://avatars3.githubusercontent.com/u/27494805?s=460&v=4")
                 .WithColor(255, 241, 185);
