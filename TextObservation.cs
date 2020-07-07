@@ -65,7 +65,7 @@ namespace AvaBot
             var settings = Utils.GetSettings(((SocketGuildChannel)message.Channel).Guild.Id);
 
             // modpack case
-            if (settings.reactionToUsername)
+            if (settings.reactToUserScan)
             {
                 var username = message.Author.Username.ToLower().Replace(" ", "");
                 var emote = (Emote)((SocketGuildChannel)message.Channel).Guild.Emotes.FirstOrDefault(e => e.Name.ToLower() == username);

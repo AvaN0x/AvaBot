@@ -10,13 +10,13 @@ using System.Threading.Tasks;
 using System.Collections.Generic;
 using Microsoft.Extensions.Configuration;
 
-//#pragma warning disable CS1998
 namespace AvaBot.Modules
 {
     // for commands to be available, and have the Context passed to them, we must inherit ModuleBase
     [Group("settings")]
     [Alias("set", "s")]
-    [RequireOwner]
+    [RequireAdminRole(Group = "Permission")]
+    [RequireOwner(Group = "Permission")]
     public class SettingsCommands : ModuleBase
     {
         [Command]
@@ -34,7 +34,7 @@ namespace AvaBot.Modules
                 "\n• `cheh` : *" + (guildSettings.chehScan ? "Activated" : "Disabled") + "*" +
                 "\n• `gf1` : *" + (guildSettings.gf1Scan ? "Activated" : "Disabled") + "*" +
                 "\n• `ine` : *" + (guildSettings.ineScan ? "Activated" : "Disabled") + "*" +
-                "\n• `reactuser` : *" + (guildSettings.reactionToUsername ? "Activated" : "Disabled") + "*" +
+                "\n• `reactuser` : *" + (guildSettings.reactToUserScan ? "Activated" : "Disabled") + "*" +
                 "", false)
                 .AddField("User", "" +
                     "• `info` : *Always*" +
@@ -67,7 +67,7 @@ namespace AvaBot.Modules
                     guildSettings.chehScan = flag;
                     guildSettings.gf1Scan = flag;
                     guildSettings.ineScan = flag;
-                    guildSettings.reactionToUsername = flag;
+                    guildSettings.reactToUserScan = flag;
                     await Utils.LogAsync("Value of all scan settings set to `" + flag + "` on `" + Context.Guild.Name + "`");
 
                     Utils.SaveData();
@@ -90,7 +90,7 @@ namespace AvaBot.Modules
                             "\nValue of **cheh** is *" + guildSettings.chehScan + "*" +
                             "\nValue of **gf1** is *" + guildSettings.gf1Scan + "*" +
                             "\nValue of **ine** is *" + guildSettings.ineScan + "*" +
-                            "\nValue of **reactuser** is *" + guildSettings.reactionToUsername + "*" +
+                            "\nValue of **reactuser** is *" + guildSettings.reactToUserScan + "*" +
                             "")
                         .WithColor(255, 241, 185);
                     await ReplyAsync("", false, embedMessage.Build());
@@ -101,49 +101,65 @@ namespace AvaBot.Modules
             // //s scan modpack bool --> set modpackScan to bool value
             [Command("modpack")]
             public async Task SetModpackScanCommand(string value = null)
-                => await SetBoolean("modpackScan", Utils.GetSettings(Context.Guild.Id), value, Context);
+                => await SetObject("modpackScan", bool.TryParse(value, out var flag), flag, Context);
 
             // //s scan cheh --> display value
             // //s scan cheh bool --> set chehScan to bool value
             [Command("cheh")]
             public async Task SetChehScanCommand(string value = null)
-                => await SetBoolean("chehScan", Utils.GetSettings(Context.Guild.Id), value, Context);
+                //=> await SetBoolean("chehScan", Utils.GetSettings(Context.Guild.Id), value, Context);
+                => await SetObject("chehScan", bool.TryParse(value, out var flag), flag, Context);
+
 
             //// //s scan gf1 --> display value
             //// //s scan gf1 bool --> set gf1Scan to bool value
             [Command("gf1")]
             public async Task SetGf1ScanCommand(string value = null)
-                => await SetBoolean("gf1Scan", Utils.GetSettings(Context.Guild.Id), value, Context);
+                => await SetObject("gf1Scan", bool.TryParse(value, out var flag), flag, Context);
 
             // //s scan ine --> display value
             // //s scan ine bool --> set ineScan to bool value
             [Command("ine")]
             public async Task SetIneScanCommand(string value = null)
-                => await SetBoolean("ineScan", Utils.GetSettings(Context.Guild.Id), value, Context);
+                => await SetObject("ineScan", bool.TryParse(value, out var flag), flag, Context);
 
             // //s scan reactuser --> display value
             // //s scan reactuser bool --> set reactionToUsername to bool value
             [Command("reactuser")]
             public async Task SetReactUserCommand(string value = null)
-                => await SetBoolean("reactionToUsername", Utils.GetSettings(Context.Guild.Id), value, Context);
+                => await SetObject("reactToUserScan", bool.TryParse(value, out var flag), flag, Context);
         }
 
+        // //s role [role name/id/mention]
+        [Command("adminrole")]
+        [Alias("role")]
+        [RequireOwner] // Only the owner can change the role
+        public async Task SetAdminRoleCommand(SocketRole role = null)
+        {
+            if (role != null)
+                await SetObject("adminRoleId", true, role.Id, Context);
+            else
+                await SetObject("adminRoleId", false, null, Context);
+        }
+
+        // //s mute [true/false]
         [Command("mute")]
         public async Task MuteCommand(string value = null)
         {
             bool flag;
-            if (Boolean.TryParse(value, out flag) && !flag)
+            var tryparse = Boolean.TryParse(value, out flag);
+            if (tryparse && !flag)
             {
                 Utils.GetSettings(Context.Guild.Id).muted.Clear();
                 await Utils.LogAsync("Every muted got unmuted on `" + Context.Guild.Name + "`");
             }
-            await SetBoolean("reactionToUsername", Utils.GetSettings(Context.Guild.Id), value, Context);
+            await SetObject("admin_mute", tryparse, flag, Context);
         }
 
-        public static async Task SetBoolean(string settingName, GuildSettings settings, string value, ICommandContext context)
+        public static async Task SetObject(string settingName, bool tryparse, object flag, ICommandContext context)
         {
+            var settings = Utils.GetSettings(context.Guild.Id);
             EmbedBuilder embedMessage;
-            bool flag;
             var type = settings.GetType();
             var props = type.GetProperties();
             var focused = props.FirstOrDefault(prop => prop.Name == settingName);
@@ -158,7 +174,7 @@ namespace AvaBot.Modules
                 return;
             }
 
-            if (Boolean.TryParse(value, out flag))
+            if (tryparse)
             {
                 focused.SetValue(settings, flag);
                 await Utils.LogAsync("Value of `" + settingName + "` set to `" + flag + "` on `" + context.Guild.Name + "`");
@@ -171,7 +187,7 @@ namespace AvaBot.Modules
             else
             {
                 embedMessage = new EmbedBuilder()
-                    .WithDescription("Value of **" + settingName + "** is *" + focused.GetValue(settings) + "*")
+                    .WithDescription("Value of **" + settingName + "** is *" + (focused.GetValue(settings) != null ? focused.GetValue(settings) : "null" ) + "*")
                     .WithColor(255, 241, 185);
             }
             await context.Channel.SendMessageAsync("", false, embedMessage.Build());

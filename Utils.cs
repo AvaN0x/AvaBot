@@ -6,6 +6,7 @@ using System.Runtime.Serialization.Formatters.Binary;
 using System.Runtime.Serialization;
 using System.Threading.Tasks;
 using Discord;
+using Discord.WebSocket;
 
 namespace AvaBot
 {
@@ -57,16 +58,16 @@ namespace AvaBot
             stream.Close();
         }
 
-        public static GuildSettings GetSettings(ulong key)
+        public static GuildSettings GetSettings(ulong guildId)
         {
             GuildSettings value;
-            if (guildSettings.TryGetValue(key, out value))
+            if (guildSettings.TryGetValue(guildId, out value))
                 return value; 
             else
             {
-                guildSettings.Add(key, new GuildSettings());
-                Utils.LogAsync("Add settings for " + key);
-                return guildSettings[key];
+                guildSettings.Add(guildId, new GuildSettings());
+                Utils.LogAsync("Add settings for " + guildId);
+                return guildSettings[guildId];
             }
         }
 
@@ -89,27 +90,29 @@ namespace AvaBot
     [Serializable]
     public class GuildSettings
     {
+        public ulong? adminRoleId { get; set; }
+
         public Dictionary<ulong, DateTime> muted { get; set; }
 
         public bool modpackScan { get; set; }
         public bool chehScan { get; set; }
         public bool gf1Scan { get; set; }
         public bool ineScan { get; set; }
-
-        public bool reactionToUsername { get; set; }
+        public bool reactToUserScan { get; set; }
 
         public bool admin_mute { get; set; }
 
         public GuildSettings()
         {
+            this.adminRoleId = null;
+
             this.muted = new Dictionary<ulong, DateTime>();
 
             this.modpackScan = true;
             this.chehScan = true;
             this.gf1Scan = true;
             this.ineScan = true;
-
-            this.reactionToUsername = false;
+            this.reactToUserScan = false;
 
             this.admin_mute = true;
 
@@ -134,10 +137,10 @@ namespace AvaBot
 
 
 
-        [OnDeserializing]
-        private void SetMissingDefault(StreamingContext sc)
-        {
-            reactionToUsername = false;
-        }
+        //[OnDeserializing]
+        //private void SetMissingDefault(StreamingContext sc)
+        //{
+        //    reactToUserScan = false;
+        //}
     }
 }
