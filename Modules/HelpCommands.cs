@@ -30,7 +30,6 @@ namespace AvaBot.Modules
                     "", false)
                 .AddField("Text scan", "" +
                     "Those are not commands, they just scan every message posted." + 
-                    "\n• `modpack` : answer if the message contains \"modpack\" or any other writing of this" +
                     "\n• `cheh` : answer if the message contains \"cheh\"" +
                     "\n• `gf1` : answer if the message contains \"gf1\" or \"j'ai faim\"" +
                     "\n• `ine` : answer if the message contains a word that end with \"ine\"" +
@@ -74,7 +73,5 @@ namespace AvaBot.Modules
 
             await ReplyAsync("", false, embedMessage.Build());
         }
-
-
     }
 }

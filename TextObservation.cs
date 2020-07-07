@@ -16,18 +16,10 @@ namespace AvaBot
         {
             var settings = Utils.GetSettings(((SocketGuildChannel)message.Channel).Guild.Id);
             var msg = message.Content.ToLower();
-            // modpack case
-            if (settings.modpackScan && 
-                new Regex("(m(o|0|au|eau)(d|t|s|x|e de)?).{0,5}(p(a|4)(c|q|k))").IsMatch(msg))
-            {
-                await message.Channel.SendMessageAsync("Non ta gueule ! " + message.Author.Mention + "\nRaison : je veux pas jouer à ce modpack !");
-                await message.AddReactionAsync(new Emoji("❌"));
-                return;
-            }
 
             // "cheh" case
             if (settings.chehScan &&
-                    new Regex("(ch([eéè]+|ai)h+)").IsMatch(msg))
+                    new Regex("(ch([eéè]+)h+)").IsMatch(msg))
             {
                 EmbedBuilder embedMessage = new EmbedBuilder()
                     .WithImageUrl("https://media.tenor.com/images/db5d206d665edc6b77c088da7bba097b/tenor.gif")
@@ -64,7 +56,7 @@ namespace AvaBot
         {
             var settings = Utils.GetSettings(((SocketGuildChannel)message.Channel).Guild.Id);
 
-            // modpack case
+            // react to user message case
             if (settings.reactToUserScan)
             {
                 var username = message.Author.Username.ToLower().Replace(" ", "");

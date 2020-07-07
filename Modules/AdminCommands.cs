@@ -78,9 +78,6 @@ namespace AvaBot.Modules
                 await ReplyAsync("", false, embedMessage.Build());
 
             }
-
-            //await ReplyAsync(Utils.GetSettings(Context.Guild.Id).admin_mute.ToString());
         }
-
     }
 }

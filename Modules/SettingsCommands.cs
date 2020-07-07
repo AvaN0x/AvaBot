@@ -30,8 +30,7 @@ namespace AvaBot.Modules
                     "• `github` or `avan0x` : *Always*" +
                     "", false)
                 .AddField("Text scan", "" +
-                "• `modpack` : *" + (guildSettings.modpackScan ? "Activated" : "Disabled") + "*" +
-                "\n• `cheh` : *" + (guildSettings.chehScan ? "Activated" : "Disabled") + "*" +
+                "• `cheh` : *" + (guildSettings.chehScan ? "Activated" : "Disabled") + "*" +
                 "\n• `gf1` : *" + (guildSettings.gf1Scan ? "Activated" : "Disabled") + "*" +
                 "\n• `ine` : *" + (guildSettings.ineScan ? "Activated" : "Disabled") + "*" +
                 "\n• `reactuser` : *" + (guildSettings.reactToUserScan ? "Activated" : "Disabled") + "*" +
@@ -63,7 +62,6 @@ namespace AvaBot.Modules
                 bool flag;
                 if (Boolean.TryParse(value, out flag))
                 {
-                    guildSettings.modpackScan = flag;
                     guildSettings.chehScan = flag;
                     guildSettings.gf1Scan = flag;
                     guildSettings.ineScan = flag;
@@ -73,8 +71,7 @@ namespace AvaBot.Modules
                     Utils.SaveData();
                     EmbedBuilder embedMessage = new EmbedBuilder()
                         .WithDescription("" + 
-                            "Value of **modpack** set to *" + flag + "*" +
-                            "\nValue of **cheh** set to *" + flag + "*" +
+                            "Value of **cheh** set to *" + flag + "*" +
                             "\nValue of **gf1** set to *" + flag + "*" +
                             "\nValue of **ine** set to *" + flag + "*" +
                             "\nValue of **reactuser** set to *" + flag + "*" +
@@ -86,8 +83,7 @@ namespace AvaBot.Modules
                 {
                     EmbedBuilder embedMessage = new EmbedBuilder()
                         .WithDescription("" + 
-                            "Value of **modpack** is *" + guildSettings.modpackScan + "*" +
-                            "\nValue of **cheh** is *" + guildSettings.chehScan + "*" +
+                            "Value of **cheh** is *" + guildSettings.chehScan + "*" +
                             "\nValue of **gf1** is *" + guildSettings.gf1Scan + "*" +
                             "\nValue of **ine** is *" + guildSettings.ineScan + "*" +
                             "\nValue of **reactuser** is *" + guildSettings.reactToUserScan + "*" +
@@ -96,12 +92,6 @@ namespace AvaBot.Modules
                     await ReplyAsync("", false, embedMessage.Build());
                 }
             }
-
-            // //s scan modpack --> display value
-            // //s scan modpack bool --> set modpackScan to bool value
-            [Command("modpack")]
-            public async Task SetModpackScanCommand(string value = null)
-                => await SetObject("modpackScan", bool.TryParse(value, out var flag), flag, Context);
 
             // //s scan cheh --> display value
             // //s scan cheh bool --> set chehScan to bool value

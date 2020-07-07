@@ -94,7 +94,6 @@ namespace AvaBot
 
         public Dictionary<ulong, DateTime> muted { get; set; }
 
-        public bool modpackScan { get; set; }
         public bool chehScan { get; set; }
         public bool gf1Scan { get; set; }
         public bool ineScan { get; set; }
@@ -108,7 +107,6 @@ namespace AvaBot
 
             this.muted = new Dictionary<ulong, DateTime>();
 
-            this.modpackScan = true;
             this.chehScan = true;
             this.gf1Scan = true;
             this.ineScan = true;
