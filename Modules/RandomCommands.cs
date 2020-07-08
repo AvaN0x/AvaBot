@@ -26,16 +26,16 @@ namespace AvaBot.Modules
             EmbedBuilder embedMessage = new EmbedBuilder()
                 .WithTitle(user.Username + " informations")
                 .AddField("Global", "" +
-                    "• ToString() : *" + user.ToString() + "*" + 
-                    "\n• CreatedAt : *" + user.CreatedAt.ToString("F", DateTimeFormatInfo.InvariantInfo) + "*" + 
-                    "\n• Activity : *" + user.Activity + "*" + // TODO show only if the value is not null
-                    "\n• Status : *" + user.Status + "*" + 
-                    "\n• GetDefaultAvatarUrl() : *[link](" + user.GetDefaultAvatarUrl() + ")*" + 
-                    "\n• GetAvatarUrl() : *[link](" + user.GetAvatarUrl() + ")*" + 
+                    "• ToString() : *" + user.ToString() + "*" +
+                    "\n• CreatedAt : *" + user.CreatedAt.ToString("F", DateTimeFormatInfo.InvariantInfo) + "*" +
+                    (user.Activity == null ? "" : "\n• Activity : *" + user.Activity + "*") +
+                    "\n• Status : *" + user.Status + "*" +
+                    "\n• GetDefaultAvatarUrl() : *[link](" + user.GetDefaultAvatarUrl() + ")*" +
+                    "\n• GetAvatarUrl() : *[link](" + user.GetAvatarUrl() + ")*" +
                     "", false)
                 .AddField("Guild", "" +
-                    "\n• Guild : *" + user.Guild + "*" + 
-                    "\n• Nickname : *" + user.Nickname + "*" + // TODO show only if the value is not null
+                    "\n• Guild : *" + user.Guild + "*" +
+                    (String.IsNullOrEmpty(user.Nickname) ? "" : "\n• Nickname : *" + user.Nickname + "*") +
                     "\n• JoinedAt : *" + ((DateTimeOffset) user.JoinedAt).ToString("F", DateTimeFormatInfo.InvariantInfo) + "*" + 
                     "", false)
                 .WithFooter("github.com/AvaN0x", "https://avatars3.githubusercontent.com/u/27494805?s=460&v=4")
