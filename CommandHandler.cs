@@ -11,24 +11,6 @@ using System.Linq;
 
 namespace AvaBot
 {
-    // To get the CommandService into the module, we need to initialize it
-    public class Initialize
-    {
-        private readonly CommandService _commands;
-        private readonly DiscordSocketClient _client;
-
-        public Initialize(CommandService commands = null, DiscordSocketClient client = null)
-        {
-            _commands = commands ?? new CommandService();
-            _client = client ?? new DiscordSocketClient();
-        }
-
-        public IServiceProvider BuildServiceProvider() => new ServiceCollection()
-            .AddSingleton(_client)
-            .AddSingleton(_commands)
-            .AddSingleton<CommandHandler>()
-            .BuildServiceProvider();
-    }
     public class CommandHandler
     {
         // setup fields to be set later in the constructor
