@@ -18,7 +18,8 @@ namespace AvaBot.Modules
 
         [Command("info")]
         [Alias("me")]
-        public async Task InfoCommand(SocketGuildUser user = null)
+        [Summary("Get informations about an user")]
+        public async Task InfoCommand([Summary("The optional user to get informations from")][Remainder]SocketGuildUser user = null)
         {
             if (user == null)
                 user = (SocketGuildUser)Context.User;
@@ -46,7 +47,8 @@ namespace AvaBot.Modules
         }
 
         [Command("github")]
-        [Alias("avan0x")]
+        [Alias("avan0x", "owner")]
+        [Summary("Give informations about the bot owner")]
         public async Task GitHubCommand()
         {
             EmbedBuilder embedMessage = new EmbedBuilder()
@@ -62,13 +64,14 @@ namespace AvaBot.Modules
         }
 
         [Command("timer", RunMode = RunMode.Async)]
-        public async Task TimerCommand(int duree)
+        [Summary("Setup a message that will be sent in X seconds")]
+        public async Task TimerCommand([Summary("The duration in seconds")]int duration)
         {
-            var date = DateTime.Now.AddSeconds(duree);
+            var date = DateTime.Now.AddSeconds(duration);
             await ReplyAsync(DateTime.Now.ToString("T") + " : Date set to " + date.ToString("T"));
             while (DateTime.Now <= date)
                 await Task.Delay(1);
-            await ReplyAsync(DateTime.Now.ToString("T") + " : " + Context.User.Mention + " ça devrait faire " + duree + " secondes");
+            await ReplyAsync(DateTime.Now.ToString("T") + " : " + Context.User.Mention + " ça devrait faire " + duration + " secondes");
         }
 
         //[Command("test"]

@@ -19,7 +19,8 @@ namespace AvaBot.Modules
     public class AdminCommands : ModuleBase
     {
         [Command("mute")]
-        public async Task MuteCommand(SocketGuildUser user = null, int minutes = 5)
+        [Summary("Allow you to mute an user, every of his messages will be deleted.")]
+        public async Task MuteCommand([Summary("The user to mute")] SocketGuildUser user = null, [Summary("Duration in minutes")]int minutes = 5)
         {
             if (!Utils.GetSettings(Context.Guild.Id).admin_mute)
                 return;
@@ -50,7 +51,8 @@ namespace AvaBot.Modules
         }
 
         [Command("unmute")]
-        public async Task UnMuteCommand(SocketGuildUser user = null)
+        [Summary("Allow you to unmute an user")]
+        public async Task UnMuteCommand([Summary("The user to unmute")] SocketGuildUser user = null)
         {
             if (!Utils.GetSettings(Context.Guild.Id).admin_mute)
                 return;

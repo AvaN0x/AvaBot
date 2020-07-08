@@ -21,7 +21,10 @@ namespace AvaBot.Modules
         {
             _commands = commands;
         }
+
         [Command]
+        [Alias("h")]
+        [Summary("Give informations about every commands")]
         public async Task HelpCommand()
         {
             // TODO use reflection and get summary of commands
@@ -55,6 +58,10 @@ namespace AvaBot.Modules
 
             //List<CommandInfo> commands = _commands.Commands.ToList();
             //EmbedBuilder embedBuilder = new EmbedBuilder()
+            //    .WithTitle("Commands help")
+            //    .WithDescription("" +
+            //        "The prefix is `//`." +
+            //        "\nUse `//help settings` for informations about setting commands.")
             //    .WithFooter("github.com/AvaN0x", "https://avatars3.githubusercontent.com/u/27494805?s=460&v=4")
             //    .WithColor(255, 241, 185);
 
@@ -63,7 +70,7 @@ namespace AvaBot.Modules
 
             //foreach (var command in commands.OrderBy(c => c.Module.Name))
             //{
-            //    if (moduleName == "") 
+            //    if (moduleName == "")
             //        moduleName = command.Module.Name;
             //    if (moduleName != command.Module.Name)
             //    {
@@ -71,16 +78,19 @@ namespace AvaBot.Modules
             //        moduleName = command.Module.Name;
             //        fieldContent = "";
             //    }
-
-            //    fieldContent += "• `" + command.Name + "` : " + (command.Summary ?? "No description available\n");
-
+            //    // TODO verification to not go further than the max of char in field content
+            //    fieldContent += "• `" + command.Name + "` : " + (command.Summary ?? "No description available") + "\n";
+            //    if (command.HasVarArgs)
+            //        await Utils.LogAsync(command.Name);
             //}
+            //embedBuilder.AddField(moduleName, fieldContent);
 
             //await ReplyAsync("", false, embedBuilder.Build());
         }
 
         [Command("settings")]
         [Alias("set" , "s")]
+        [Summary("Give informations about settings commands")]
         public async Task HelpSettingsCommand()
         {
             EmbedBuilder embedMessage = new EmbedBuilder()

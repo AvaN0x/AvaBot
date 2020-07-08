@@ -16,11 +16,13 @@ namespace AvaBot.Modules
     // for commands to be available, and have the Context passed to them, we must inherit ModuleBase
     [Group("settings")]
     [Alias("set", "s")]
+    [Summary("Every commands to setup the bot")]
     [RequireAdminRole(Group = "Permission")]
     [RequireOwner(Group = "Permission")]
     public class SettingsCommands : ModuleBase
     {
         [Command]
+        [Summary("A command that give you every value for the different commands")]
         public async Task AllValueCommand()
         {
             var settings = Utils.GetSettings(Context.Guild.Id);
@@ -59,11 +61,13 @@ namespace AvaBot.Modules
 
         [Group("textscan")]
         [Alias("scan")]
+        [Summary("Settings for text observations")]
         public class SettingsCommands_Scan : ModuleBase
         {
             // //s scan --> display values
             // //s scan bool --> set all to bool value
             [Command]
+            [Summary("Get and set all of scan values")]
             public async Task SetTextScanCommand(string value = null)
             {
                 var settings = Utils.GetSettings(Context.Guild.Id);
@@ -105,6 +109,7 @@ namespace AvaBot.Modules
             // //s scan cheh --> display value
             // //s scan cheh bool --> set chehScan to bool value
             [Command("cheh")]
+            [Summary("answer if the message contains \"cheh\"")]
             public async Task SetChehScanCommand(string value = null)
                 //=> await SetBoolean("chehScan", Utils.GetSettings(Context.Guild.Id), value, Context);
                 => await SetObject("chehScan", bool.TryParse(value, out var flag), flag, Context);
@@ -113,12 +118,16 @@ namespace AvaBot.Modules
             //// //s scan gf1 --> display value
             //// //s scan gf1 bool --> set gf1Scan to bool value
             [Command("gf1")]
+            [Summary("answer if the message contains \"gf1\" or \"j'ai faim\"")]
+
             public async Task SetGf1ScanCommand(string value = null)
                 => await SetObject("gf1Scan", bool.TryParse(value, out var flag), flag, Context);
 
             // //s scan ine --> display value
             // //s scan ine bool --> set ineScan to bool value
             [Command("ine")]
+            [Summary("answer if the message contains a word that end with \"ine\"")]
+
             public async Task SetIneScanCommand(string value = null)
                 => await SetObject("ineScan", bool.TryParse(value, out var flag), flag, Context);
 
@@ -126,6 +135,7 @@ namespace AvaBot.Modules
             // //s scan reactuser bool --> set reactionToUsername to bool value
             [Command("reacttouser")]
             [Alias("reactuser")]
+            [Summary("react if an emote exists with the same name as the user")]
             public async Task SetReactUserCommand(string value = null)
                 => await SetObject("reactToUserScan", bool.TryParse(value, out var flag), flag, Context);
         }
@@ -133,6 +143,7 @@ namespace AvaBot.Modules
         // //s role [role name/id/mention]
         [Command("adminrole")]
         [Alias("role")]
+        [Summary("set the needed role to access setting and admin commands")]
         [RequireOwner] // Only the owner can change the role
         public async Task SetAdminRoleCommand(SocketRole role = null)
         {
@@ -144,6 +155,7 @@ namespace AvaBot.Modules
 
         // //s mute [true/false]
         [Command("mute")]
+        [Summary("mute the user for the expected time (default 5 minutes)")]
         public async Task MuteCommand(string value = null)
         {
             bool flag;
