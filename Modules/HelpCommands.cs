@@ -12,81 +12,46 @@ using Microsoft.Extensions.Configuration;
 namespace AvaBot.Modules
 {
     // for commands to be available, and have the Context passed to them, we must inherit ModuleBase
+    [Summary("Help Commands")]
     [Group("help")]
-    [Alias("h")]
+    [Alias("help", "h")]
     public class HelpCommands : ModuleBase
     {
         private readonly CommandService _commands;
-        public HelpCommands(CommandService commands)
+        private readonly IConfiguration _config;
+
+        public HelpCommands(CommandService commands, IConfiguration config)
         {
             _commands = commands;
+            _config = config;
         }
 
         [Command]
-        [Alias("h")]
         [Summary("Give informations about every commands")]
         public async Task HelpCommand()
         {
-            // TODO use reflection and get summary of commands
-            EmbedBuilder embedMessage = new EmbedBuilder()
+            List<CommandInfo> commands = _commands.Commands.ToList();
+            EmbedBuilder embedBuilder = new EmbedBuilder()
                 .WithTitle("Commands help")
                 .WithDescription("" +
-                    "The prefix is `//`." +
-                    "\nUse `//help settings` for informations about setting commands.")
-                .AddField("Randoms", "" +
-                    "• `github` or `avan0x` : send informations about the bot owner" +
-                    "", false)
-                .AddField("Text scan", "" +
-                    "Those are not commands, they just scan every message posted." +
-                    "\n• `cheh` : answer if the message contains \"cheh\"" +
-                    "\n• `gf1` : answer if the message contains \"gf1\" or \"j'ai faim\"" +
-                    "\n• `ine` : answer if the message contains a word that end with \"ine\"" +
-                    "\n• `reacttouser` : react if an emote exists with the same name as the user" +
-                    "", false)
-                .AddField("User", "" +
-                    "• `info [username]` : give information about the user, or yourself if there is no parameter" +
-                    "", false)
-                .AddField("Admin", "" +
-                    "• `mute [username] [duration in minutes]` : mute the user for the expected time (default 5 minutes)" +
-                    "\n• `unmute [username]` : unmute the user" +
-                    "\n• `adminrole [role]` : set the needed role to access setting and admin commands" +
-                    "", false)
+                    "The prefix is `" + _config["Prefix"] + "`.")
                 .WithFooter("github.com/AvaN0x", "https://avatars3.githubusercontent.com/u/27494805?s=460&v=4")
                 .WithColor(255, 241, 185);
 
-            await ReplyAsync("", false, embedMessage.Build());
-
-            //List<CommandInfo> commands = _commands.Commands.ToList();
-            //EmbedBuilder embedBuilder = new EmbedBuilder()
-            //    .WithTitle("Commands help")
-            //    .WithDescription("" +
-            //        "The prefix is `//`." +
-            //        "\nUse `//help settings` for informations about setting commands.")
-            //    .WithFooter("github.com/AvaN0x", "https://avatars3.githubusercontent.com/u/27494805?s=460&v=4")
-            //    .WithColor(255, 241, 185);
-
-            //var moduleName = "";
-            //var fieldContent = "";
-
-            //foreach (var command in commands.OrderBy(c => c.Module.Name))
-            //{
-            //    if (moduleName == "")
-            //        moduleName = command.Module.Name;
-            //    if (moduleName != command.Module.Name)
-            //    {
-            //        embedBuilder.AddField(moduleName, fieldContent);
-            //        moduleName = command.Module.Name;
-            //        fieldContent = "";
-            //    }
-            //    // TODO verification to not go further than the max of char in field content
-            //    fieldContent += "• `" + command.Name + "` : " + (command.Summary ?? "No description available") + "\n";
-            //    if (command.HasVarArgs)
-            //        await Utils.LogAsync(command.Name);
-            //}
-            //embedBuilder.AddField(moduleName, fieldContent);
-
-            //await ReplyAsync("", false, embedBuilder.Build());
+            foreach (var module in _commands.Modules)
+            {
+                var fieldContent = "";
+                foreach (var command in module.Commands)
+                {
+                    fieldContent += "• `" + _config["Prefix"] + command.Aliases.First() + string.Join("", command.Parameters.Select(p => " [" + p.Name + "]")) +
+                        "` : " + (command.Summary ?? "No description available") +
+                        string.Concat(command.Parameters.Select(p => "\n[" + p.Name + "] : *" + (p.Summary ?? "No description available") + "*")) + "\n";
+                }
+                embedBuilder.AddField(module.Summary ?? "No summary available", fieldContent);
+            }
+            await ReplyAsync("", false, embedBuilder.Build());
         }
+
 
         [Command("settings")]
         [Alias("set" , "s")]

@@ -14,6 +14,7 @@ using System.Globalization;
 namespace AvaBot.Modules
 {
     // for commands to be available, and have the Context passed to them, we must inherit ModuleBase
+    [Summary("Admin Commands")]
     [RequireAdminRole(Group = "Permission")]
     [RequireOwner(Group = "Permission")]
     public class AdminCommands : ModuleBase

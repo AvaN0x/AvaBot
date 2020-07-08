@@ -14,9 +14,9 @@ using System.Text.RegularExpressions;
 namespace AvaBot.Modules
 {
     // for commands to be available, and have the Context passed to them, we must inherit ModuleBase
+    [Summary("Settings Commands")]
     [Group("settings")]
     [Alias("set", "s")]
-    [Summary("Every commands to setup the bot")]
     [RequireAdminRole(Group = "Permission")]
     [RequireOwner(Group = "Permission")]
     public class SettingsCommands : ModuleBase
@@ -59,16 +59,16 @@ namespace AvaBot.Modules
 
         }
 
+        [Summary("Text Scanning Settings")]
         [Group("textscan")]
         [Alias("scan")]
-        [Summary("Settings for text observations")]
         public class SettingsCommands_Scan : ModuleBase
         {
             // //s scan --> display values
             // //s scan bool --> set all to bool value
             [Command]
-            [Summary("Get and set all of scan values")]
-            public async Task SetTextScanCommand(string value = null)
+            [Summary("set all of scan values")]
+            public async Task SetTextScanCommand([Summary("Boolean value to set")]string boolean = null)
             {
                 var settings = Utils.GetSettings(Context.Guild.Id);
 
@@ -77,7 +77,7 @@ namespace AvaBot.Modules
                 var scanText = "";
 
                 bool flag;
-                if (Boolean.TryParse(value, out flag))
+                if (Boolean.TryParse(boolean, out flag))
                 {
                     foreach (var prop in props.Where(prop => new Regex("(Scan)$").IsMatch(prop.Name)))
                     {
@@ -110,9 +110,8 @@ namespace AvaBot.Modules
             // //s scan cheh bool --> set chehScan to bool value
             [Command("cheh")]
             [Summary("answer if the message contains \"cheh\"")]
-            public async Task SetChehScanCommand(string value = null)
-                //=> await SetBoolean("chehScan", Utils.GetSettings(Context.Guild.Id), value, Context);
-                => await SetObject("chehScan", bool.TryParse(value, out var flag), flag, Context);
+            public async Task SetChehScanCommand([Summary("Boolean value to set")]string boolean = null)
+                => await SetObject("chehScan", bool.TryParse(boolean, out var flag), flag, Context);
 
 
             //// //s scan gf1 --> display value
@@ -120,24 +119,23 @@ namespace AvaBot.Modules
             [Command("gf1")]
             [Summary("answer if the message contains \"gf1\" or \"j'ai faim\"")]
 
-            public async Task SetGf1ScanCommand(string value = null)
-                => await SetObject("gf1Scan", bool.TryParse(value, out var flag), flag, Context);
+            public async Task SetGf1ScanCommand([Summary("Boolean value to set")]string boolean = null)
+                => await SetObject("gf1Scan", bool.TryParse(boolean, out var flag), flag, Context);
 
             // //s scan ine --> display value
             // //s scan ine bool --> set ineScan to bool value
             [Command("ine")]
             [Summary("answer if the message contains a word that end with \"ine\"")]
-
-            public async Task SetIneScanCommand(string value = null)
-                => await SetObject("ineScan", bool.TryParse(value, out var flag), flag, Context);
+            public async Task SetIneScanCommand([Summary("Boolean value to set")]string boolean = null)
+                => await SetObject("ineScan", bool.TryParse(boolean, out var flag), flag, Context);
 
             // //s scan reactuser --> display value
             // //s scan reactuser bool --> set reactionToUsername to bool value
             [Command("reacttouser")]
             [Alias("reactuser")]
             [Summary("react if an emote exists with the same name as the user")]
-            public async Task SetReactUserCommand(string value = null)
-                => await SetObject("reactToUserScan", bool.TryParse(value, out var flag), flag, Context);
+            public async Task SetReactUserCommand([Summary("Boolean value to set")]string boolean = null)
+                => await SetObject("reactToUserScan", bool.TryParse(boolean, out var flag), flag, Context);
         }
 
         // //s role [role name/id/mention]
@@ -145,7 +143,7 @@ namespace AvaBot.Modules
         [Alias("role")]
         [Summary("set the needed role to access setting and admin commands")]
         [RequireOwner] // Only the owner can change the role
-        public async Task SetAdminRoleCommand(SocketRole role = null)
+        public async Task SetAdminRoleCommand([Summary("Role mention/name/id to set")]SocketRole role = null)
         {
             if (role != null)
                 await SetObject("adminRoleId", true, role.Id, Context);
@@ -155,11 +153,12 @@ namespace AvaBot.Modules
 
         // //s mute [true/false]
         [Command("mute")]
-        [Summary("mute the user for the expected time (default 5 minutes)")]
-        public async Task MuteCommand(string value = null)
+        [Summary("set the accessibility or not of the mute and unmute command " + 
+            "\n/!\\ Setting it to false will clear all the muted users")]
+        public async Task MuteCommand([Summary("Boolean value to set")]string boolean = null)
         {
             bool flag;
-            var tryparse = Boolean.TryParse(value, out flag);
+            var tryparse = Boolean.TryParse(boolean, out flag);
             if (tryparse && !flag)
             {
                 Utils.GetSettings(Context.Guild.Id).muted.Clear();
@@ -169,7 +168,7 @@ namespace AvaBot.Modules
         }
 
         public static async Task SetObject(string settingName, bool tryparse, object flag, ICommandContext context)
-        // use like that : await SetObject(settingName, bool.TryParse(value, out var flag), flag, Context);
+        // use like : await SetObject(settingName, bool.TryParse(boolean, out var flag), flag, Context);
         {
             var settings = Utils.GetSettings(context.Guild.Id);
             EmbedBuilder embedMessage;

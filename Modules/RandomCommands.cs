@@ -13,6 +13,7 @@ using System.Globalization;
 namespace AvaBot.Modules
 {
     // for commands to be available, and have the Context passed to them, we must inherit ModuleBase
+    [Summary("Random Commands")]
     public class RandomCommands : ModuleBase
     {
 
@@ -43,7 +44,6 @@ namespace AvaBot.Modules
                 .WithColor(255, 241, 185);
 
             await ReplyAsync("", false, embedMessage.Build());
-
         }
 
         [Command("github")]
