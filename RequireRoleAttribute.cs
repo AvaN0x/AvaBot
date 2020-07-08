@@ -16,7 +16,6 @@ namespace AvaBot
             CommandInfo command, IServiceProvider services)
         {
             ulong? _roleId = Utils.GetSettings(context.Guild.Id).adminRoleId;
-            //ulong _roleId = 464106544993402890;
 
             if (_roleId == null)
                 return PreconditionResult.FromError("There is not setted role for this guild.");
