@@ -177,13 +177,21 @@ namespace AvaBot.Modules
 
             if (tryparse)
             {
-                focused.SetValue(settings, flag);
-                await Utils.LogAsync("Value of `" + settingName + "` set to `" + flag + "` on `" + context.Guild.Name + "`");
-                // TODO save only if different of actual value
-                Utils.SaveData();
-                embedMessage = new EmbedBuilder()
-                    .WithDescription("Value of **" + settingName + "** set to *" + flag + "*")
-                    .WithColor(255, 241, 185);
+                if (focused.GetValue(settings).Equals(flag))
+                {
+                    embedMessage = new EmbedBuilder()
+                        .WithDescription("Value of **" + settingName + "** is already *" + flag + "*")
+                        .WithColor(255, 241, 185);
+                } 
+                else
+                {
+                    focused.SetValue(settings, flag);
+                    await Utils.LogAsync("Value of `" + settingName + "` set to `" + flag + "` on `" + context.Guild.Name + "`");
+                    Utils.SaveData();
+                    embedMessage = new EmbedBuilder()
+                        .WithDescription("Value of **" + settingName + "** set to *" + flag + "*")
+                        .WithColor(255, 241, 185);
+                }
             }
             else
             {
