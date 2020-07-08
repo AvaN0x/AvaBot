@@ -20,6 +20,7 @@ namespace AvaBot.Modules
         [Command]
         public async Task HelpCommand()
         {
+            // TODO use reflection and get summary of commands
             EmbedBuilder embedMessage = new EmbedBuilder()
                 .WithTitle("Commands help")
                 .WithDescription("" + 
