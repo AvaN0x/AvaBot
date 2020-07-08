@@ -16,21 +16,25 @@ namespace AvaBot.Modules
     [Alias("h")]
     public class HelpCommands : ModuleBase
     {
-
+        private readonly CommandService _commands;
+        public HelpCommands(CommandService commands)
+        {
+            _commands = commands;
+        }
         [Command]
         public async Task HelpCommand()
         {
             // TODO use reflection and get summary of commands
             EmbedBuilder embedMessage = new EmbedBuilder()
                 .WithTitle("Commands help")
-                .WithDescription("" + 
-                    "The prefix is `//`." + 
+                .WithDescription("" +
+                    "The prefix is `//`." +
                     "\nUse `//help settings` for informations about setting commands.")
                 .AddField("Randoms", "" +
                     "• `github` or `avan0x` : send informations about the bot owner" +
                     "", false)
                 .AddField("Text scan", "" +
-                    "Those are not commands, they just scan every message posted." + 
+                    "Those are not commands, they just scan every message posted." +
                     "\n• `cheh` : answer if the message contains \"cheh\"" +
                     "\n• `gf1` : answer if the message contains \"gf1\" or \"j'ai faim\"" +
                     "\n• `ine` : answer if the message contains a word that end with \"ine\"" +
@@ -48,6 +52,31 @@ namespace AvaBot.Modules
                 .WithColor(255, 241, 185);
 
             await ReplyAsync("", false, embedMessage.Build());
+
+            //List<CommandInfo> commands = _commands.Commands.ToList();
+            //EmbedBuilder embedBuilder = new EmbedBuilder()
+            //    .WithFooter("github.com/AvaN0x", "https://avatars3.githubusercontent.com/u/27494805?s=460&v=4")
+            //    .WithColor(255, 241, 185);
+
+            //var moduleName = "";
+            //var fieldContent = "";
+
+            //foreach (var command in commands.OrderBy(c => c.Module.Name))
+            //{
+            //    if (moduleName == "") 
+            //        moduleName = command.Module.Name;
+            //    if (moduleName != command.Module.Name)
+            //    {
+            //        embedBuilder.AddField(moduleName, fieldContent);
+            //        moduleName = command.Module.Name;
+            //        fieldContent = "";
+            //    }
+
+            //    fieldContent += "• `" + command.Name + "` : " + (command.Summary ?? "No description available\n");
+
+            //}
+
+            //await ReplyAsync("", false, embedBuilder.Build());
         }
 
         [Command("settings")]
