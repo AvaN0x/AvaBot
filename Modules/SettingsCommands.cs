@@ -167,7 +167,7 @@ namespace AvaBot.Modules
             await SetObject("admin_mute", tryparse, flag, Context);
         }
 
-        public static async Task SetObject(string settingName, bool tryparse, object flag, ICommandContext context)
+        private static async Task SetObject(string settingName, bool tryparse, object flag, ICommandContext context)
         // use like : await SetObject(settingName, bool.TryParse(boolean, out var flag), flag, Context);
         {
             var settings = Utils.GetSettings(context.Guild.Id);
