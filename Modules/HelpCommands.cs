@@ -12,7 +12,7 @@ using Microsoft.Extensions.Configuration;
 namespace AvaBot.Modules
 {
     // for commands to be available, and have the Context passed to them, we must inherit ModuleBase
-    [Summary("Help Commands")]
+    [Summary("📋 Help Commands")]
     [Group("help")]
     [Alias("h")]
     public class HelpCommands : ModuleBase

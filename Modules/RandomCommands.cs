@@ -13,7 +13,7 @@ using System.Globalization;
 namespace AvaBot.Modules
 {
     // for commands to be available, and have the Context passed to them, we must inherit ModuleBase
-    [Summary("Random Commands")]
+    [Summary("😁 Random Commands")]
     public class RandomCommands : ModuleBase
     {
 

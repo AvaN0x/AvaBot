@@ -14,7 +14,7 @@ using System.Text.RegularExpressions;
 namespace AvaBot.Modules
 {
     // for commands to be available, and have the Context passed to them, we must inherit ModuleBase
-    [Summary("Settings Commands")]
+    [Summary("⚙️ Settings Commands")]
     [Group("settings")]
     [Alias("set", "s")]
     [RequireAdminRole(Group = "Permission")]
@@ -59,7 +59,7 @@ namespace AvaBot.Modules
 
         }
 
-        [Summary("Text Scanning Settings")]
+        [Summary("🔎 Text Scanning Settings")]
         [Group("textscan")]
         [Alias("scan")]
         public class SettingsCommands_Scan : ModuleBase
