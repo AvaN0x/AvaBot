@@ -73,7 +73,7 @@ namespace AvaBot
 
         public static Task LogAsync(LogMessage log)
         {
-            LogAsync(log.Source + " : " + log.Message + (log.Exception != null ? "\n\t" + log.Exception : ""), log.Severity.ToString());
+            LogAsync(log.Source + " : " + log.Message + (log.Exception != null ? "\n" + log.Exception : ""), log.Severity.ToString());
             return Task.CompletedTask;
         }
 
