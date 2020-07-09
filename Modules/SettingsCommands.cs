@@ -16,7 +16,7 @@ namespace AvaBot.Modules
     // for commands to be available, and have the Context passed to them, we must inherit ModuleBase
     [Summary("⚙️ Settings Commands")]
     [Group("settings")]
-    [Alias("set", "s")]
+    [Alias("s")]
     [RequireAdminRole(Group = "Permission")]
     [RequireOwner(Group = "Permission")]
     public class SettingsCommands : ModuleBase
@@ -62,8 +62,7 @@ namespace AvaBot.Modules
 
         // TODO change to command enable and disable
         [Summary("🔎 Text Scanning Settings")]
-        [Group("textscan")]
-        [Alias("scan")]
+        [Group("scan")]
         public class SettingsCommands_Scan : ModuleBase
         {
             // //s scan --> display values
