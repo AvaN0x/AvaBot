@@ -21,7 +21,8 @@ namespace AvaBot.Modules
     [RequireOwner(Group = "Permission")]
     public class SettingsCommands : ModuleBase
     {
-        [Command]
+        [Command("values")]
+        [Alias("")]
         [Summary("A command that give you every value for the different commands")]
         public async Task AllValueCommand()
         {
@@ -67,7 +68,8 @@ namespace AvaBot.Modules
         {
             // //s scan --> display values
             // //s scan bool --> set all to bool value
-            [Command]
+            [Command("values")]
+            [Alias("")]
             [Summary("set all of scan values")]
             public async Task SetTextScanCommand([Summary("Boolean value to set")]string boolean = null)
             {
