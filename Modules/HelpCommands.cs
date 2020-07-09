@@ -14,7 +14,7 @@ namespace AvaBot.Modules
     // for commands to be available, and have the Context passed to them, we must inherit ModuleBase
     [Summary("Help Commands")]
     [Group("help")]
-    [Alias("help", "h")]
+    [Alias("h")]
     public class HelpCommands : ModuleBase
     {
         private readonly CommandService _commands;
