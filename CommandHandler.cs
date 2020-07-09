@@ -111,7 +111,9 @@ namespace AvaBot
             EmbedBuilder embedMessage = new EmbedBuilder()
                 .WithDescription("This command does not exist or you can't use it.")
                 .WithColor(255, 0, 0);
-            await context.Channel.SendMessageAsync("", false, embedMessage.Build());
+            var errorMessage = await context.Channel.SendMessageAsync("", false, embedMessage.Build());
+            await Task.Delay(5000);
+            await errorMessage.DeleteAsync();
         }        
     }
 }
