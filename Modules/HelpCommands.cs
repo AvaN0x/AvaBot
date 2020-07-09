@@ -54,7 +54,7 @@ namespace AvaBot.Modules
                         "` : " + (command.Summary ?? "No description available") +
                         string.Concat(command.Parameters.Select(p => "\n[" + p.Name + "] : *" + (p.Summary ?? "No description available") + "*")) + "\n";
                 }
-                embedBuilder.AddField(module.Summary ?? "No summary available", fieldContent);
+                embedBuilder.AddField(module.Summary ?? module.Name, fieldContent);
             }
             await ReplyAsync("", false, embedBuilder.Build());
         }
