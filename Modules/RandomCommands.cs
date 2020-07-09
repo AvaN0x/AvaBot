@@ -71,7 +71,7 @@ namespace AvaBot.Modules
             await ReplyAsync(DateTime.Now.ToString("T") + " : Date set to " + date.ToString("T"));
             while (DateTime.Now <= date)
                 await Task.Delay(1);
-            await ReplyAsync(DateTime.Now.ToString("T") + " : " + Context.User.Mention + " ça devrait faire " + duration + " secondes");
+            await ReplyAsync(DateTime.Now.ToString("T") + " : " + Context.User.Mention + " : " + duration + " seconds have passed");
         }
 
         //[Command("test"]
