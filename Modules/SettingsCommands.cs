@@ -157,8 +157,7 @@ namespace AvaBot.Modules
             "\n/!\\ Setting it to false will clear all the muted users")]
         public async Task MuteCommand([Summary("Boolean value to set")]string boolean = null)
         {
-            bool flag;
-            var tryparse = Boolean.TryParse(boolean, out flag);
+            var tryparse = Boolean.TryParse(boolean, out bool flag);
             if (tryparse && !flag)
             {
                 Utils.GetSettings(Context.Guild.Id).muted.Clear();
