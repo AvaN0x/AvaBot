@@ -19,7 +19,7 @@ namespace AvaBot
 
             // "cheh" case
             if (settings.chehScan &&
-                    new Regex("(ch([eéè]+)h+)").IsMatch(msg))
+                    new Regex("((ch([eéè]+)h+)|(^ch[eéè]+$))").IsMatch(msg))
             {
                 EmbedBuilder embedMessage = new EmbedBuilder()
                     .WithImageUrl("https://media.tenor.com/images/db5d206d665edc6b77c088da7bba097b/tenor.gif")

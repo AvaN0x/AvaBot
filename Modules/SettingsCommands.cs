@@ -59,6 +59,7 @@ namespace AvaBot.Modules
 
         }
 
+        // TODO change to command enable and disable
         [Summary("🔎 Text Scanning Settings")]
         [Group("textscan")]
         [Alias("scan")]
