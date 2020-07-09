@@ -112,7 +112,7 @@ namespace AvaBot
                 .WithDescription("This command does not exist or you can't use it.")
                 .WithColor(255, 0, 0);
             var errorMessage = await context.Channel.SendMessageAsync("", false, embedMessage.Build());
-            await Task.Delay(5000);
+            await Task.Delay(5000); // 5 seconds
             await errorMessage.DeleteAsync();
         }        
     }
