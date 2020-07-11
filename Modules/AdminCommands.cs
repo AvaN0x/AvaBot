@@ -55,6 +55,7 @@ namespace AvaBot.Modules
         [Summary("Allow you to unmute an user")]
         public async Task UnMuteCommand([Summary("The user to unmute")] SocketGuildUser user = null)
         {
+            //TODO precondition like : [RequireGuildSetting("admin_mute")]
             if (!Utils.GetSettings(Context.Guild.Id).admin_mute)
                 return;
 
