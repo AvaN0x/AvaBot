@@ -114,7 +114,6 @@ namespace AvaBot.Modules
 
         // //s role [role name/id/mention]
         [Command("adminrole")]
-        [Alias("role")]
         [Summary("set the needed role to access setting and admin commands")]
         [RequireOwner] // Only the owner can change the role
         public async Task SetAdminRoleCommand([Summary("Role mention/name/id to set")]SocketRole role = null)
