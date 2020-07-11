@@ -15,8 +15,6 @@ namespace AvaBot.Modules
 {
     // for commands to be available, and have the Context passed to them, we must inherit ModuleBase
     [Summary("⚙️ Settings Commands")]
-    [Group("settings")]
-    [Alias("s")]
     [RequireAdminRole(Group = "Permission")]
     [RequireOwner(Group = "Permission")]
     public class SettingsCommands : ModuleBase
@@ -74,7 +72,6 @@ namespace AvaBot.Modules
 
 
         [Command("values")]
-        [Alias("")]
         [Summary("A command that give you every value for the different commands")]
         public async Task AllValueCommand()
         {
