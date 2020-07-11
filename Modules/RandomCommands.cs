@@ -60,7 +60,6 @@ namespace AvaBot.Modules
                 .WithColor(255, 241, 185);
 
             await ReplyAsync("", false, embedMessage.Build());
-            await Context.Message.DeleteAsync();
         }
 
         [Command("timer", RunMode = RunMode.Async)]
