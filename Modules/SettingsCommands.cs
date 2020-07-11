@@ -21,6 +21,58 @@ namespace AvaBot.Modules
     [RequireOwner(Group = "Permission")]
     public class SettingsCommands : ModuleBase
     {
+        [Command("enable")]
+        [Summary("Enable a command")]
+        public async Task EnableCommand([Summary("Command name. Use \"all\" to select all of them.")]string command = null)
+        {
+            await AbleCommand(command, true);
+        }
+
+        [Command("disable")]
+        [Summary("Disable a command")]
+        public async Task DisableCommand([Summary("Command name. Use \"all\" to select all of them.")]string command = null)
+        {
+            await AbleCommand(command, false);
+        }
+
+        private async Task AbleCommand(string command, bool value)
+        {
+            var settings = Utils.GetSettings(Context.Guild.Id);
+            var type = settings.GetType();
+            var props = type.GetProperties().Where(p => p.GetValue(settings) is bool);
+
+            if (command != null)
+            {
+                var focused = props.Where(p => command == "all" ? true : p.Name.ToLower() == command.ToLower());
+                bool anyChange = false;
+                foreach (var f in focused)
+                {
+                    if (!f.GetValue(settings).Equals(value))
+                    {
+                        if (command == "admin_mute" && !value) // unmute everyone if needed
+                        {
+                            Utils.GetSettings(Context.Guild.Id).muted.Clear();
+                            await Utils.LogAsync("Every muted got unmuted on `" + Context.Guild.Name + "`");
+                        }
+                        f.SetValue(settings, value);
+                        await Utils.LogAsync(f.Name + " " + (value ? "enabled" : "disabled") + " on `" + Context.Guild.Name + "`");
+                        anyChange = true;
+                    }
+                }
+                if (anyChange) Utils.SaveData(); // save only if changements were made
+            }
+
+            EmbedBuilder embedMessage = new EmbedBuilder()
+                .WithTitle("Commands states")
+                .WithDescription(string.Join(", ", props.Select(p => (bool)p.GetValue(settings) ? "*" + p.Name + "*" : "~~`" + p.Name + "`~~")))
+                .WithFooter("github.com/AvaN0x", "https://avatars3.githubusercontent.com/u/27494805?s=460&v=4")
+                .WithColor(255, 241, 185);
+
+            await ReplyAsync("", false, embedMessage.Build());
+
+        }
+
+
         [Command("values")]
         [Alias("")]
         [Summary("A command that give you every value for the different commands")]
@@ -60,86 +112,6 @@ namespace AvaBot.Modules
 
         }
 
-        // TODO change to command enable and disable
-        [Summary("🔎 Text Scanning Settings")]
-        [Group("scan")]
-        public class SettingsCommands_Scan : ModuleBase
-        {
-            // //s scan --> display values
-            // //s scan bool --> set all to bool value
-            [Command("values")]
-            [Alias("")]
-            [Summary("set all of scan values")]
-            public async Task SetTextScanCommand([Summary("Boolean value to set")]string boolean = null)
-            {
-                var settings = Utils.GetSettings(Context.Guild.Id);
-
-                var type = settings.GetType();
-                var props = type.GetProperties();
-                var scanText = "";
-
-                bool flag;
-                if (Boolean.TryParse(boolean, out flag))
-                {
-                    foreach (var prop in props.Where(prop => new Regex("(Scan)$").IsMatch(prop.Name)))
-                    {
-                        var propValue = prop.GetValue(settings);
-                        if (propValue is bool)
-                        {
-                            prop.SetValue(settings, flag);
-                            scanText += "• Value of **" + prop.Name[0..^4] + "** set to *" + flag + "*\n";
-                            await Utils.LogAsync("Value of `" + prop.Name[0..^4] + "` set to `" + flag + "` on `" + Context.Guild.Name + "`");
-                        } else
-                            scanText += "• Value of **" + prop.Name[0..^4] + "** is still *" + propValue + "*\n";
-                    }
-                    Utils.SaveData();
-                }
-                else
-                {
-                    foreach (var prop in props.Where(prop => new Regex("(Scan)$").IsMatch(prop.Name)))
-                    {
-                        scanText += "• Value of **" + prop.Name[0..^4] + "** is *" + prop.GetValue(settings) + "*\n";
-                    }
-                }
-                EmbedBuilder embedMessage = new EmbedBuilder()
-                    .WithDescription(scanText)
-                    .WithColor(255, 241, 185);
-                await ReplyAsync("", false, embedMessage.Build());
-
-            }
-
-            // //s scan cheh --> display value
-            // //s scan cheh bool --> set chehScan to bool value
-            [Command("cheh")]
-            [Summary("answer if the message contains \"cheh\"")]
-            public async Task SetChehScanCommand([Summary("Boolean value to set")]string boolean = null)
-                => await SetObject("chehScan", bool.TryParse(boolean, out var flag), flag, Context);
-
-
-            //// //s scan gf1 --> display value
-            //// //s scan gf1 bool --> set gf1Scan to bool value
-            [Command("gf1")]
-            [Summary("answer if the message contains \"gf1\" or \"j'ai faim\"")]
-
-            public async Task SetGf1ScanCommand([Summary("Boolean value to set")]string boolean = null)
-                => await SetObject("gf1Scan", bool.TryParse(boolean, out var flag), flag, Context);
-
-            // //s scan ine --> display value
-            // //s scan ine bool --> set ineScan to bool value
-            [Command("ine")]
-            [Summary("answer if the message contains a word that end with \"ine\"")]
-            public async Task SetIneScanCommand([Summary("Boolean value to set")]string boolean = null)
-                => await SetObject("ineScan", bool.TryParse(boolean, out var flag), flag, Context);
-
-            // //s scan reactuser --> display value
-            // //s scan reactuser bool --> set reactionToUsername to bool value
-            [Command("reacttouser")]
-            [Alias("reactuser")]
-            [Summary("react if an emote exists with the same name as the user")]
-            public async Task SetReactUserCommand([Summary("Boolean value to set")]string boolean = null)
-                => await SetObject("reactToUserScan", bool.TryParse(boolean, out var flag), flag, Context);
-        }
-
         // //s role [role name/id/mention]
         [Command("adminrole")]
         [Alias("role")]
@@ -151,21 +123,6 @@ namespace AvaBot.Modules
                 await SetObject("adminRoleId", true, role.Id, Context);
             else
                 await SetObject("adminRoleId", false, null, Context);
-        }
-
-        // //s mute [true/false]
-        [Command("mute")]
-        [Summary("set the accessibility or not of the mute and unmute command " + 
-            "\n/!\\ Setting it to false will clear all the muted users")]
-        public async Task MuteCommand([Summary("Boolean value to set")]string boolean = null)
-        {
-            var tryparse = Boolean.TryParse(boolean, out bool flag);
-            if (tryparse && !flag)
-            {
-                Utils.GetSettings(Context.Guild.Id).muted.Clear();
-                await Utils.LogAsync("Every muted got unmuted on `" + Context.Guild.Name + "`");
-            }
-            await SetObject("admin_mute", tryparse, flag, Context);
         }
 
         private static async Task SetObject(string settingName, bool tryparse, object flag, ICommandContext context)
