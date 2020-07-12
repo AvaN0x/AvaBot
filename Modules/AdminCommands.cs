@@ -21,11 +21,9 @@ namespace AvaBot.Modules
     {
         [Command("mute")]
         [Summary("Allow you to mute an user, each of his messages will be deleted.")]
+        [RequireSetting("admin_mute")]
         public async Task MuteCommand([Summary("The user to mute")] SocketGuildUser user = null, [Summary("Duration in minutes")]int minutes = 5)
         {
-            if (!Utils.GetSettings(Context.Guild.Id).admin_mute)
-                return;
-
             EmbedBuilder embedMessage;
             if (user == null)
             {
@@ -47,18 +45,13 @@ namespace AvaBot.Modules
                 .WithDescription(embedDesc)
                 .WithColor(0, 255, 0);
             await ReplyAsync("", false, embedMessage.Build());
-
-
         }
 
         [Command("unmute")]
         [Summary("Allow you to unmute an user")]
+        [RequireSetting("admin_mute")]
         public async Task UnMuteCommand([Summary("The user to unmute")] SocketGuildUser user = null)
         {
-            //TODO precondition like : [RequireGuildSetting("admin_mute")]
-            if (!Utils.GetSettings(Context.Guild.Id).admin_mute)
-                return;
-
             if (user == null)
             {
                 EmbedBuilder embedMessage = new EmbedBuilder()

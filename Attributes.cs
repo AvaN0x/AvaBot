@@ -34,4 +34,32 @@ namespace AvaBot
                 : PreconditionResult.FromError("You do not have the sufficient role required to access this command.");
         }
     }
+
+    public class RequireSettingAttribute : PreconditionAttribute
+    {
+        private readonly string _name;
+
+        public RequireSettingAttribute(string name) => _name = name;
+
+        public override async Task<PreconditionResult> CheckPermissionsAsync(ICommandContext context,
+            CommandInfo command, IServiceProvider services)
+        {
+            var guildUser = context.User as IGuildUser;
+            if (guildUser == null)
+                return PreconditionResult.FromError("This command cannot be executed outside of a guild.");
+
+            var settings = Utils.GetSettings(context.Guild.Id);
+            var type = settings.GetType();
+            var props = type.GetProperties();
+            var focused = props.FirstOrDefault(prop => prop.Name == _name);
+
+            if (focused == null)
+                return PreconditionResult.FromError("The setting required (" + _name + ") cannot be found.");
+
+            return (bool)focused.GetValue(settings)
+                ? PreconditionResult.FromSuccess()
+                : PreconditionResult.FromError("This guild have disabled this command.");
+        }
+    }
+
 }
