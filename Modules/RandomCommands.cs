@@ -73,6 +73,14 @@ namespace AvaBot.Modules
             await ReplyAsync(DateTime.Now.ToString("T") + " : " + Context.User.Mention + " : " + duration + " seconds have passed");
         }
 
+        [Command("say")]
+        [Summary("Make the bot say whatever you want")]
+        public async Task SayCommand([Remainder][Summary("The text to say")]string text)
+        {
+            await ReplyAsync(text);
+            await Context.Message.DeleteAsync();
+        }
+
         //[Command("test"]
         //[Summary("A command for tests")]
         //public async Task TestCommand()
