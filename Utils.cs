@@ -84,6 +84,7 @@ namespace AvaBot
     [Serializable]
     public class GuildSettings
     {
+        //TODO add maj to first char of each var names
         public ulong? adminRoleId { get; set; }
 
         public Dictionary<ulong, DateTime> muted { get; set; }
@@ -111,8 +112,7 @@ namespace AvaBot
 
         public bool IsMuted(ulong id)
         {
-            DateTime date;
-            if (muted.TryGetValue(id, out date))
+            if (muted.TryGetValue(id, out DateTime date))
             {
                 if (DateTime.Now > date)
                 {

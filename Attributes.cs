@@ -18,7 +18,7 @@ namespace AvaBot
             if (_roleId == null)
                 return PreconditionResult.FromError("There is not setted role for this guild.");
 
-            var guildUser = context.User as IGuildUser;
+            IGuildUser guildUser = context.User as IGuildUser;
             if (guildUser == null)
                 return PreconditionResult.FromError("This command cannot be executed outside of a guild.");
 
