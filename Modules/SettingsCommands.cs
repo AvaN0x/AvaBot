@@ -1,15 +1,9 @@
 ﻿using Discord;
-using Discord.Net;
-using Discord.WebSocket;
 using Discord.Commands;
-using System;
-using System.Reflection;
+using Discord.WebSocket;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Collections.Generic;
-using Microsoft.Extensions.Configuration;
 using System.Text.RegularExpressions;
+using System.Threading.Tasks;
 
 namespace AvaBot.Modules
 {
@@ -21,14 +15,14 @@ namespace AvaBot.Modules
     {
         [Command("enable")]
         [Summary("Enable a command")]
-        public async Task EnableCommand([Summary("Command name. Use \"all\" to select all of them.")]string command = null)
+        public async Task EnableCommand([Summary("Command name. Use \"all\" to select all of them.")] string command = null)
         {
             await AbleCommand(command, true);
         }
 
         [Command("disable")]
         [Summary("Disable a command")]
-        public async Task DisableCommand([Summary("Command name. Use \"all\" to select all of them.")]string command = null)
+        public async Task DisableCommand([Summary("Command name. Use \"all\" to select all of them.")] string command = null)
         {
             await AbleCommand(command, false);
         }
@@ -67,9 +61,7 @@ namespace AvaBot.Modules
                 .WithColor(255, 241, 185);
 
             await ReplyAsync("", false, embedMessage.Build());
-
         }
-
 
         [Command("values")]
         [Summary("A command that give you every value for the different commands")]
@@ -106,14 +98,13 @@ namespace AvaBot.Modules
                 .WithColor(255, 241, 185);
 
             await ReplyAsync("", false, embedMessage.Build());
-
         }
 
         // //s role [role name/id/mention]
         [Command("adminrole")]
         [Summary("set the needed role to access setting and admin commands")]
         [RequireOwner] // Only the owner can change the role
-        public async Task SetAdminRoleCommand([Summary("Role mention/name/id to set")]SocketRole role = null)
+        public async Task SetAdminRoleCommand([Summary("Role mention/name/id to set")] SocketRole role = null)
         {
             if (role != null)
                 await SetObject("adminRoleId", true, role.Id, Context);
@@ -147,7 +138,7 @@ namespace AvaBot.Modules
                     embedMessage = new EmbedBuilder()
                         .WithDescription("Value of **" + settingName + "** is already *" + flag + "*")
                         .WithColor(255, 241, 185);
-                } 
+                }
                 else
                 {
                     focused.SetValue(settings, flag);
@@ -161,7 +152,7 @@ namespace AvaBot.Modules
             else
             {
                 embedMessage = new EmbedBuilder()
-                    .WithDescription("Value of **" + settingName + "** is *" + (focused.GetValue(settings) != null ? focused.GetValue(settings) : "null" ) + "*")
+                    .WithDescription("Value of **" + settingName + "** is *" + (focused.GetValue(settings) != null ? focused.GetValue(settings) : "null") + "*")
                     .WithColor(255, 241, 185);
             }
             await context.Channel.SendMessageAsync("", false, embedMessage.Build());

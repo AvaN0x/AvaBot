@@ -1,21 +1,19 @@
-﻿using System;
-using Discord;
-using Discord.Net;
+﻿using Discord;
 using Discord.Commands;
 using Discord.WebSocket;
-using System.Threading.Tasks;
 using Microsoft.Extensions.Configuration;
-using Microsoft.Extensions.Configuration.Json;
 using Microsoft.Extensions.DependencyInjection;
+using System;
+using System.Threading.Tasks;
 
 namespace AvaBot
 {
-    class Program
+    internal class Program
     {
         private readonly IConfiguration _config;
         private DiscordSocketClient _client;
 
-        static void Main(string[] args)
+        private static void Main(string[] args)
         {
             new Program().MainAsync().GetAwaiter().GetResult();
         }
@@ -25,7 +23,7 @@ namespace AvaBot
             // create and build configuration to access the json file
             var _builder = new ConfigurationBuilder()
                 .SetBasePath(AppContext.BaseDirectory)
-                .AddJsonFile(path: "config.json");  
+                .AddJsonFile(path: "config.json");
 
             _config = _builder.Build();
         }

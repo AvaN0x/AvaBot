@@ -1,13 +1,11 @@
-﻿using System;
-using System.Reflection;
-using System.Threading.Tasks;
-using Microsoft.Extensions.DependencyInjection;
-using Discord;
+﻿using Discord;
 using Discord.Commands;
 using Discord.WebSocket;
 using Microsoft.Extensions.Configuration;
-using System.Text.RegularExpressions;
-using System.Linq;
+using Microsoft.Extensions.DependencyInjection;
+using System;
+using System.Reflection;
+using System.Threading.Tasks;
 
 namespace AvaBot
 {
@@ -25,7 +23,7 @@ namespace AvaBot
             _commands = services.GetRequiredService<CommandService>();
             _client = services.GetRequiredService<DiscordSocketClient>();
             _services = services;
-            
+
             // set method used when we executed a command
             _commands.CommandExecuted += CommandExecutedAsync;
 
@@ -45,10 +43,10 @@ namespace AvaBot
                 await rawMessage.Channel.SendMessageAsync("Shut up dad !");
 
             // only accept User messages and not bots
-            if (!(rawMessage is SocketUserMessage message)) 
+            if (!(rawMessage is SocketUserMessage message))
                 return;
             // verify if the source of the message is not the client
-            if (message.Source != MessageSource.User) 
+            if (message.Source != MessageSource.User)
                 return;
 
             if (message.Channel is SocketGuildChannel channel)
@@ -65,7 +63,6 @@ namespace AvaBot
                 }
             }
 
-
             // var for the arguments position
             var argPos = 0;
             // determine if the message has a valid prefix, and adjust argPos based on prefix
@@ -78,11 +75,11 @@ namespace AvaBot
                 }
                 return;
             }
-           
+
             var context = new SocketCommandContext(_client, message);
 
             // execute command if one is found that matches
-            await _commands.ExecuteAsync(context, argPos, _services); 
+            await _commands.ExecuteAsync(context, argPos, _services);
         }
 
         public async Task CommandExecutedAsync(Optional<CommandInfo> command, ICommandContext context, IResult result)
@@ -93,7 +90,6 @@ namespace AvaBot
                 await Utils.LogAsync($"Command failed to execute for [{context.User}] on [{context.Guild.Name}] <-> [{result.ErrorReason}]!", "Error");
                 return;
             }
-                
 
             // case if the command is a success
             if (result.IsSuccess)
@@ -101,7 +97,6 @@ namespace AvaBot
                 await Utils.LogAsync($"Command [{command.Value.Name}] executed for [{context.User}] on [{context.Guild.Name}]");
                 return;
             }
-
 
             // other cases
             await Utils.LogAsync($"{context.User} something went wrong : [{result}]!", "Error");
@@ -111,6 +106,6 @@ namespace AvaBot
             var errorMessage = await context.Channel.SendMessageAsync("", false, embedMessage.Build());
             await Task.Delay(5000); // 5 seconds
             await errorMessage.DeleteAsync();
-        }        
+        }
     }
 }

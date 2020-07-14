@@ -1,13 +1,8 @@
 ﻿using Discord;
-using Discord.Net;
-using Discord.WebSocket;
 using Discord.Commands;
-using System;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Collections.Generic;
 using Microsoft.Extensions.Configuration;
+using System.Linq;
+using System.Threading.Tasks;
 
 namespace AvaBot.Modules
 {
@@ -42,7 +37,6 @@ namespace AvaBot.Modules
                 embedBuilder.AddField(module.Summary ?? module.Name,
                     string.Join(", ", module.Commands.Select(c => "`" + c.Name + "`")));
             await ReplyAsync("", false, embedBuilder.Build());
-
         }
 
         [Command("help")]
@@ -66,7 +60,6 @@ namespace AvaBot.Modules
                 .WithFooter("github.com/AvaN0x", "https://avatars3.githubusercontent.com/u/27494805?s=460&v=4")
                 .WithColor(255, 241, 185);
 
-
             foreach (var cmd in commands)
             {
                 embedBuilder.AddField("Command " + cmd.Name, "" +
@@ -79,14 +72,12 @@ namespace AvaBot.Modules
                     "");
             }
             await ReplyAsync("", false, embedBuilder.Build());
-
         }
 
         //[Command]
         //[Summary("Give informations about every commands")]
         //public async Task HelpCommand()
         //    => await ShowModuleHelp("Commands help", _commands.Modules.Where(m => !m.Aliases.First().Contains("settings")));
-
 
         //[Command("settings")]
         //[Alias("set" , "s")]

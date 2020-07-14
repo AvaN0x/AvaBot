@@ -1,14 +1,9 @@
 ﻿using Discord;
-using Discord.Net;
-using Discord.WebSocket;
 using Discord.Commands;
+using Discord.WebSocket;
 using System;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Collections.Generic;
-using Microsoft.Extensions.Configuration;
 using System.Globalization;
+using System.Threading.Tasks;
 
 //#pragma warning disable CS1998
 namespace AvaBot.Modules
@@ -22,7 +17,7 @@ namespace AvaBot.Modules
         [Command("mute")]
         [Summary("Allow you to mute an user, each of his messages will be deleted.")]
         [RequireSetting("admin_mute")]
-        public async Task MuteCommand([Summary("The user to mute")] SocketGuildUser user = null, [Summary("Duration in minutes, default : 5 minutes")]int minutes = 5)
+        public async Task MuteCommand([Summary("The user to mute")] SocketGuildUser user = null, [Summary("Duration in minutes, default : 5 minutes")] int minutes = 5)
         {
             EmbedBuilder embedMessage;
             if (user == null)
@@ -67,13 +62,14 @@ namespace AvaBot.Modules
                     .WithDescription(user + " is not muted.")
                     .WithColor(255, 0, 0);
                 await ReplyAsync("", false, embedMessage.Build());
-            } else {
+            }
+            else
+            {
                 Utils.GetSettings(Context.Guild.Id).muted.Remove(user.Id);
                 EmbedBuilder embedMessage = new EmbedBuilder()
                     .WithDescription(user + " is now unmuted.")
                     .WithColor(0, 255, 0);
                 await ReplyAsync("", false, embedMessage.Build());
-
             }
         }
     }

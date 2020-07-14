@@ -1,12 +1,9 @@
-﻿using System;
+﻿using Discord;
+using System;
 using System.Collections.Generic;
-using System.Text;
 using System.IO;
 using System.Runtime.Serialization.Formatters.Binary;
-using System.Runtime.Serialization;
 using System.Threading.Tasks;
-using Discord;
-using Discord.WebSocket;
 
 namespace AvaBot
 {
@@ -15,7 +12,6 @@ namespace AvaBot
     {
         private static string path;
         private static Dictionary<ulong, GuildSettings> guildSettings { get; set; }
-
 
         public static void Init()
         {
@@ -33,8 +29,8 @@ namespace AvaBot
                 else
                     LoadData();
             }
-            catch (Exception e) 
-            { 
+            catch (Exception e)
+            {
                 Console.WriteLine(e);
             }
         }
@@ -62,7 +58,7 @@ namespace AvaBot
         {
             GuildSettings value;
             if (guildSettings.TryGetValue(guildId, out value))
-                return value; 
+                return value;
             else
             {
                 guildSettings.Add(guildId, new GuildSettings());
@@ -83,7 +79,6 @@ namespace AvaBot
             Console.WriteLine("[" + DateTime.Now.ToString("HH:mm:ss:fff") + " " + severity + "] " + message);
             return Task.CompletedTask;
         }
-
     }
 
     [Serializable]
@@ -112,7 +107,6 @@ namespace AvaBot
             this.reactToUserScan = false;
 
             this.admin_mute = true;
-
         }
 
         public bool IsMuted(ulong id)
@@ -131,8 +125,6 @@ namespace AvaBot
             else
                 return false;
         }
-
-
 
         //[OnDeserializing]
         //private void SetMissingDefault(StreamingContext sc)

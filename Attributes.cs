@@ -1,17 +1,15 @@
 ﻿using Discord;
 using Discord.Commands;
 using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 
 #pragma warning disable CS1998
+
 namespace AvaBot
 {
     public class RequireAdminRoleAttribute : PreconditionAttribute
     {
-
         public override async Task<PreconditionResult> CheckPermissionsAsync(ICommandContext context,
             CommandInfo command, IServiceProvider services)
         {
@@ -61,5 +59,4 @@ namespace AvaBot
                 : PreconditionResult.FromError("This guild have disabled this command.");
         }
     }
-
 }

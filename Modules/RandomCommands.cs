@@ -1,14 +1,9 @@
 ﻿using Discord;
-using Discord.Net;
-using Discord.WebSocket;
 using Discord.Commands;
+using Discord.WebSocket;
 using System;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Collections.Generic;
-using Microsoft.Extensions.Configuration;
 using System.Globalization;
+using System.Threading.Tasks;
 
 namespace AvaBot.Modules
 {
@@ -16,11 +11,10 @@ namespace AvaBot.Modules
     [Summary("😁 Random Commands")]
     public class RandomCommands : ModuleBase
     {
-
         [Command("info")]
         [Alias("me")]
         [Summary("Get informations about an user")]
-        public async Task InfoCommand([Summary("The optional user to get informations from")][Remainder]SocketGuildUser user = null)
+        public async Task InfoCommand([Summary("The optional user to get informations from")][Remainder] SocketGuildUser user = null)
         {
             if (user == null)
                 user = (SocketGuildUser)Context.User;
@@ -38,7 +32,7 @@ namespace AvaBot.Modules
                 .AddField("Guild", "" +
                     "\n• Guild : *" + user.Guild + "*" +
                     (String.IsNullOrEmpty(user.Nickname) ? "" : "\n• Nickname : *" + user.Nickname + "*") +
-                    "\n• JoinedAt : *" + ((DateTimeOffset) user.JoinedAt).ToString("F", DateTimeFormatInfo.InvariantInfo) + "*" + 
+                    "\n• JoinedAt : *" + ((DateTimeOffset)user.JoinedAt).ToString("F", DateTimeFormatInfo.InvariantInfo) + "*" +
                     "", false)
                 .WithFooter("github.com/AvaN0x", "https://avatars3.githubusercontent.com/u/27494805?s=460&v=4")
                 .WithColor(255, 241, 185);
@@ -64,7 +58,7 @@ namespace AvaBot.Modules
 
         [Command("timer", RunMode = RunMode.Async)]
         [Summary("Setup a message that will be sent in X seconds")]
-        public async Task TimerCommand([Summary("The duration in seconds")]int duration)
+        public async Task TimerCommand([Summary("The duration in seconds")] int duration)
         {
             var date = DateTime.Now.AddSeconds(duration);
             await ReplyAsync(DateTime.Now.ToString("T") + " : Date set to " + date.ToString("T"));
@@ -75,7 +69,7 @@ namespace AvaBot.Modules
 
         [Command("say")]
         [Summary("Make the bot say whatever you want")]
-        public async Task SayCommand([Remainder][Summary("The text to say")]string text)
+        public async Task SayCommand([Remainder][Summary("The text to say")] string text)
         {
             await ReplyAsync(text);
             await Context.Message.DeleteAsync();
@@ -85,7 +79,6 @@ namespace AvaBot.Modules
         //[Summary("A command for tests")]
         //public async Task TestCommand()
         //{
-
         //}
     }
 }
