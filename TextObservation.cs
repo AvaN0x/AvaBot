@@ -18,6 +18,7 @@ namespace AvaBot
             var msg = message.Content.ToLower();
 
             // "cheh" case
+            // TODO delete that when I'm changing the GuildSetting class
             if (settings.chehScan &&
                     new Regex("((ch([eéè]+)h+)|(^ch[eéè]+$))").IsMatch(msg))
             {
