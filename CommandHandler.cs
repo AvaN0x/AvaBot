@@ -54,27 +54,27 @@ namespace AvaBot
             if (message.Source != MessageSource.User) 
                 return;
 
-            if(Utils.GetSettings(((SocketGuildChannel)message.Channel).Guild.Id).admin_mute &&
-                Utils.GetSettings(((SocketGuildChannel)message.Channel).Guild.Id).IsMuted(message.Author.Id))
+            if (message.Channel is SocketGuildChannel channel)
             {
-                await message.Author.SendMessageAsync("Your message go deleted on *" + ((SocketGuildChannel)message.Channel).Guild.Name + "* : " + "\n> " + message.Content);
-                await message.DeleteAsync();
-                await Utils.LogAsync("Message from " + message.Author + " got removed on `" + ((SocketGuildChannel)message.Channel).Guild.Name + "`");
-                if (((SocketGuildChannel)message.Channel).Guild.OwnerId != message.Author.Id) // so the owner can unmute himself
-                    return;
+                var guild = channel.Guild;
+                if (Utils.GetSettings(guild.Id).admin_mute &&
+                    Utils.GetSettings(guild.Id).IsMuted(message.Author.Id))
+                {
+                    await message.Author.SendMessageAsync("Your message go deleted on *" + guild.Name + "* : " + "\n> " + message.Content);
+                    await message.DeleteAsync();
+                    await Utils.LogAsync("Message from " + message.Author + " got removed on `" + guild.Name + "`");
+                    if (guild.OwnerId != message.Author.Id) // so the owner can unmute himself
+                        return;
+                }
             }
 
 
             // sets the argument position away from the prefix we set
             var argPos = 0;
-
-            // get prefix from the configuration file
-            string prefix = _config["Prefix"];
-
             // determine if the message has a valid prefix, and adjust argPos based on prefix
-            if (!(message.HasStringPrefix(prefix, ref argPos)))
+            if (!(message.HasStringPrefix(_config["Prefix"], ref argPos)))
             {
-                if (message.Channel is SocketGuildChannel channel)
+                if (message.Channel is SocketGuildChannel)
                 {
                     await TextObservation.ScanContent(message);
                     await TextObservation.ScanUser(message);
