@@ -12,7 +12,6 @@ namespace AvaBot
 {
     class Program
     {
-        // setup our fields we assign later
         private readonly IConfiguration _config;
         private DiscordSocketClient _client;
 
@@ -23,59 +22,53 @@ namespace AvaBot
 
         public Program()
         {
-            // create the configuration
+            // create and build configuration to access the json file
             var _builder = new ConfigurationBuilder()
                 .SetBasePath(AppContext.BaseDirectory)
                 .AddJsonFile(path: "config.json");  
 
-            // build the configuration and assign to _config          
             _config = _builder.Build();
         }
 
         public async Task MainAsync()
         {
             // call ConfigureServices to create the ServiceCollection/Provider for passing around the services
-            using (var services = ConfigureServices())
-            {
-                // get the client and assign to client 
-                // you get the services via GetRequiredService<T>
-                var client = services.GetRequiredService<DiscordSocketClient>();
-                _client = client;
+            using var services = ConfigureServices();
+            // get the client from GetRequiredService<T>
+            var client = services.GetRequiredService<DiscordSocketClient>();
+            _client = client;
 
-                // setup logging and the ready event
-                client.Log += Utils.LogAsync;
-                client.Ready += ReadyAsync;
-                services.GetRequiredService<CommandService>().Log += Utils.LogAsync;
+            // setup logging and the ready event
+            client.Log += Utils.LogAsync;
+            client.Ready += ReadyAsync;
+            services.GetRequiredService<CommandService>().Log += Utils.LogAsync;
 
-                // this is where we get the Token value from the configuration file, and start the bot
-                await client.LoginAsync(TokenType.Bot, _config["Token"]);
-                await client.StartAsync();
+            // login and start the bot
+            await client.LoginAsync(TokenType.Bot, _config["Token"]);
+            await client.StartAsync();
 
-                // we get the CommandHandler class here and call the InitializeAsync method to start things up for the CommandHandler service
-                await services.GetRequiredService<CommandHandler>().InitializeAsync();
+            // get the CommandHandler and call the InitializeAsync method to start using it
+            await services.GetRequiredService<CommandHandler>().InitializeAsync();
 
-                await _client.SetGameAsync("github.com/AvaN0x", "", ActivityType.Watching);
+            // set the game activity
+            await _client.SetGameAsync("github.com/AvaN0x", "", ActivityType.Watching);
 
-                Utils.Init();
+            Utils.Init();
 
-                await Task.Delay(-1);
-            }
+            // let the bot run until the window is closed
+            await Task.Delay(-1);
         }
 
-
+        // log when the user is ready
         private Task ReadyAsync()
         {
             Utils.LogAsync("Connected as " + _client.CurrentUser + " on " + _client.Guilds.Count + " servers");
             return Task.CompletedTask;
         }
 
-        // this method handles the ServiceCollection creation/configuration, and builds out the service provider we can call on later
         private ServiceProvider ConfigureServices()
         {
-            // this returns a ServiceProvider that is used later to call for those services
-            // we can add types we have access to here, hence adding the new using statement:
-            // using csharpi.Services;
-            // the config we build is also added, which comes in handy for setting the command prefix!
+            // setup everything that the service will contain
             return new ServiceCollection()
                 .AddSingleton(_config)
                 .AddSingleton<DiscordSocketClient>()

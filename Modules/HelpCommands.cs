@@ -65,7 +65,7 @@ namespace AvaBot.Modules
             EmbedBuilder embedBuilder = new EmbedBuilder()
                 .WithFooter("github.com/AvaN0x", "https://avatars3.githubusercontent.com/u/27494805?s=460&v=4")
                 .WithColor(255, 241, 185);
-            
+
 
             foreach (var cmd in commands)
             {

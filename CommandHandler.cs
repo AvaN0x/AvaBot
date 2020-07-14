@@ -13,7 +13,6 @@ namespace AvaBot
 {
     public class CommandHandler
     {
-        // setup fields to be set later in the constructor
         private readonly IConfiguration _config;
         private readonly CommandService _commands;
         private readonly DiscordSocketClient _client;
@@ -21,17 +20,16 @@ namespace AvaBot
 
         public CommandHandler(IServiceProvider services)
         {
-            // juice up the fields with these services
-            // since we passed the services in, we can use GetRequiredService to pass them into the fields set earlier
+            // get services needed from the IServiceProvider
             _config = services.GetRequiredService<IConfiguration>();
             _commands = services.GetRequiredService<CommandService>();
             _client = services.GetRequiredService<DiscordSocketClient>();
             _services = services;
             
-            // take action when we execute a command
+            // set method used when we executed a command
             _commands.CommandExecuted += CommandExecutedAsync;
 
-            // take action when we receive a message (so we can process it, and see if it is a valid command)
+            // set method used when a message is recieved
             _client.MessageReceived += MessageReceivedAsync;
         }
 
@@ -41,16 +39,15 @@ namespace AvaBot
             await _commands.AddModulesAsync(Assembly.GetEntryAssembly(), _services);
         }
 
-        // this class is where the magic starts, and takes actions upon receiving messages
         public async Task MessageReceivedAsync(SocketMessage rawMessage)
         {
             if (rawMessage.Author.IsBot && rawMessage.Author.Id == 503720029456695306) // Is dadbot
                 await rawMessage.Channel.SendMessageAsync("Shut up dad !");
 
-            // ensures we don't process system/other bot messages
+            // only accept User messages and not bots
             if (!(rawMessage is SocketUserMessage message)) 
                 return;
-            
+            // verify if the source of the message is not the client
             if (message.Source != MessageSource.User) 
                 return;
 
@@ -69,7 +66,7 @@ namespace AvaBot
             }
 
 
-            // sets the argument position away from the prefix we set
+            // var for the arguments position
             var argPos = 0;
             // determine if the message has a valid prefix, and adjust argPos based on prefix
             if (!(message.HasStringPrefix(_config["Prefix"], ref argPos)))
@@ -90,7 +87,7 @@ namespace AvaBot
 
         public async Task CommandExecutedAsync(Optional<CommandInfo> command, ICommandContext context, IResult result)
         {
-            // if a command isn't found, log that info to console and exit this method
+            // case if a command isn't found
             if (!command.IsSpecified)
             {
                 await Utils.LogAsync($"Command failed to execute for [{context.User}] on [{context.Guild.Name}] <-> [{result.ErrorReason}]!", "Error");
@@ -98,7 +95,7 @@ namespace AvaBot
             }
                 
 
-            // log success to the console and exit this method
+            // case if the command is a success
             if (result.IsSuccess)
             {
                 await Utils.LogAsync($"Command [{command.Value.Name}] executed for [{context.User}] on [{context.Guild.Name}]");
@@ -106,7 +103,7 @@ namespace AvaBot
             }
 
 
-            // failure scenario, let's let the user know
+            // other cases
             await Utils.LogAsync($"{context.User} something went wrong : [{result}]!", "Error");
             EmbedBuilder embedMessage = new EmbedBuilder()
                 .WithDescription("This command does not exist or you can't use it.")
