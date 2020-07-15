@@ -1,8 +1,11 @@
 ﻿using Discord;
 using Discord.Commands;
 using Discord.WebSocket;
+using Microsoft.Extensions.Configuration;
 using System;
 using System.Globalization;
+using System.Linq;
+using System.Net.Http;
 using System.Threading.Tasks;
 
 namespace AvaBot.Modules
@@ -75,7 +78,43 @@ namespace AvaBot.Modules
             await Context.Message.DeleteAsync();
         }
 
-        //[Command("test"]
+        [Command("gif")]
+        [Summary("A command to get a random gif")]
+        public async Task GifCommand([Remainder][Summary("Tag to search")] string tag)
+        {
+            tag = tag.Replace(" ", "+");
+            var httpClient = await new HttpClient().GetAsync("http://api.giphy.com/v1/gifs/random?api_key=9teQ63i5YhQvzlaMYhv4GwpCGtVrwqG3&tag=" + tag);
+            var builder = new ConfigurationBuilder().AddJsonStream(httpClient.Content.ReadAsStreamAsync().Result)
+                .Build();
+            var gifLink = builder.GetSection("data").GetSection("images").GetSection("downsized").GetSection("url").Value;
+
+            if (!string.IsNullOrWhiteSpace(gifLink))
+            {
+                EmbedBuilder embedMessage = new EmbedBuilder()
+                    .WithImageUrl(gifLink)
+                    .WithColor(255, 241, 185);
+                await ReplyAsync("", false, embedMessage.Build());
+            }
+            else
+            {
+                EmbedBuilder embedMessage = new EmbedBuilder()
+                    .WithDescription("No gif found")
+                    .WithColor(255, 0, 0);
+                var errorMessage = await ReplyAsync("", false, embedMessage.Build());
+                await Task.Delay(5000); // 5 seconds
+                await errorMessage.DeleteAsync();
+            }
+        }
+
+        [Command("catgif")]
+        [Alias("cat")]
+        [Summary("Cats, cats everywhere")]
+        public async Task CatGifCommand()
+        {
+            await GifCommand("cat");
+        }
+
+        //[Command("test")]
         //[Summary("A command for tests")]
         //public async Task TestCommand()
         //{
