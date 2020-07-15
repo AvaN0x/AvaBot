@@ -80,7 +80,7 @@ namespace AvaBot.Modules
 
         [Command("gif")]
         [Summary("A command to get a random gif")]
-        public async Task GifCommand([Remainder][Summary("Tag to search")] string tag)
+        public async Task GifCommand([Remainder][Summary("Tag to search, nothing will get a fully random gif")] string tag = "")
         {
             tag = tag.Replace(" ", "+");
             var httpClient = await new HttpClient().GetAsync("http://api.giphy.com/v1/gifs/random?api_key=9teQ63i5YhQvzlaMYhv4GwpCGtVrwqG3&tag=" + tag);
