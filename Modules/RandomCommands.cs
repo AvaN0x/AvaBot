@@ -14,6 +14,13 @@ namespace AvaBot.Modules
     [Summary("😁 Random Commands")]
     public class RandomCommands : ModuleBase
     {
+        private readonly IConfiguration _config;
+
+        public RandomCommands(IConfiguration config)
+        {
+            _config = config;
+        }
+
         [Command("info")]
         [Alias("me")]
         [Summary("Get informations about an user")]
@@ -83,7 +90,7 @@ namespace AvaBot.Modules
         public async Task GifCommand([Remainder][Summary("Tag to search, nothing will get a fully random gif")] string tag = "")
         {
             tag = tag.Replace(" ", "+");
-            var httpClient = await new HttpClient().GetAsync("http://api.giphy.com/v1/gifs/random?api_key=9teQ63i5YhQvzlaMYhv4GwpCGtVrwqG3&tag=" + tag);
+            var httpClient = await new HttpClient().GetAsync("http://api.giphy.com/v1/gifs/random?api_key=" + _config["GiphyKey"] + "&rating=g&tag=" + tag);
             var builder = new ConfigurationBuilder().AddJsonStream(httpClient.Content.ReadAsStreamAsync().Result)
                 .Build();
             var gifLink = builder.GetSection("data").GetSection("images").GetSection("downsized").GetSection("url").Value;
