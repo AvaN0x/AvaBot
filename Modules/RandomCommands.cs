@@ -85,6 +85,18 @@ namespace AvaBot.Modules
             await Context.Message.DeleteAsync();
         }
 
+        [Command("sayembed")]
+        [Summary("Make the bot say whatever you want in an embed message")]
+        public async Task SayEmbedCommand([Remainder][Summary("The text to say")] string text)
+        {
+            EmbedBuilder embedMessage = new EmbedBuilder()
+                .WithDescription(text)
+                .WithColor(255, 241, 185);
+            await ReplyAsync("", false, embedMessage.Build());
+
+            await Context.Message.DeleteAsync();
+        }
+
         [Command("gif")]
         [Summary("A command to get a random gif")]
         public async Task GifCommand([Remainder][Summary("Tag to search, nothing will get a fully random gif")] string tag = "")
