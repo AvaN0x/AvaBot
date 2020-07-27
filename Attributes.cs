@@ -16,7 +16,7 @@ namespace AvaBot
             ulong? _roleId = Utils.GetSettings(context.Guild.Id).adminRoleId;
 
             if (_roleId == null)
-                return PreconditionResult.FromError("There is not setted role for this guild.");
+                return PreconditionResult.FromError("There is no setted role for this guild.");
 
             IGuildUser guildUser = context.User as IGuildUser;
             if (guildUser == null)
