@@ -33,6 +33,7 @@ namespace AvaBot.Modules
                 .WithFooter("github.com/AvaN0x", "https://avatars3.githubusercontent.com/u/27494805?s=460&v=4")
                 .WithColor(255, 241, 185);
 
+            //TODO : Don't add multiple times the same command
             foreach (var module in _commands.Modules.Where(m => !m.Name.ToLower().Contains("help")))
                 embedBuilder.AddField(module.Summary ?? module.Name,
                     string.Join(", ", module.Commands.Select(c => "`" + c.Name + "`")));
@@ -42,7 +43,7 @@ namespace AvaBot.Modules
         [Command("help")]
         [Alias("h")]
         [Summary("Show informations about a command")]
-        public async Task HelpCommand(string commandName)
+        public async Task HelpCommand([Summary("The command to explain")] string commandName)
         {
             var commands = _commands.Commands.Where(c => c.Name == commandName.ToLower());
             if (commands.Count() == 0)
