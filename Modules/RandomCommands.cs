@@ -6,6 +6,7 @@ using System;
 using System.Globalization;
 using System.Linq;
 using System.Net.Http;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 
 namespace AvaBot.Modules
@@ -86,15 +87,41 @@ namespace AvaBot.Modules
         }
 
         [Command("sayembed")]
-        [Summary("Make the bot say whatever you want in an embed message")]
-        public async Task SayEmbedCommand([Remainder][Summary("The text to say")] string text)
+        [Summary("Make the bot say whatever you want in an embed message. This support markdown in discord block of code (md)")]
+        public async Task SayEmbedCommand([Remainder][Summary("The text to say")] string input)
         {
             EmbedBuilder embedMessage = new EmbedBuilder()
-                .WithDescription(text)
-                .WithColor(255, 241, 185);
-            await ReplyAsync("", false, embedMessage.Build());
+            .WithColor(255, 241, 185);
+            if (!input.Contains("```md"))
+                embedMessage.WithDescription(input);
+            else
+            {
+                var description = Regex.Match(input, "^(.*\n)*?```md").Value;
+                embedMessage.WithDescription(description[0..^5].Trim())
+                    .WithFooter("github.com/AvaN0x", "https://avatars3.githubusercontent.com/u/27494805?s=460&v=4")
+                    .WithCurrentTimestamp();
+                input = input.Replace(description, "");
+                input = input.Replace("```", "");
 
-            await Context.Message.DeleteAsync();
+                var fieldTitle = "";
+                var fieldContent = "";
+                foreach (var line in input.Split("\n").ToList())
+                {
+                    if (new Regex("^#").IsMatch(line.Trim()))
+                    {
+                        if (fieldTitle != "")
+                            embedMessage.AddField(fieldTitle, fieldContent, false);
+                        fieldTitle = line.Trim()[1..^0].TrimStart();
+                        fieldContent = "";
+                    }
+                    else
+                        fieldContent += (fieldContent != "" ? "\n" : "") + line.Trim();
+                }
+                if (fieldTitle != "")
+                    embedMessage.AddField(fieldTitle, fieldContent, false);
+            }
+
+            await ReplyAsync("", false, embedMessage.Build());
         }
 
         [Command("gif")]
