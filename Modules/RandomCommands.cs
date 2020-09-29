@@ -122,6 +122,7 @@ namespace AvaBot.Modules
             }
 
             await ReplyAsync("", false, embedMessage.Build());
+            await Context.Message.DeleteAsync();
         }
 
         [Command("gif")]
