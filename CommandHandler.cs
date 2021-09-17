@@ -39,8 +39,11 @@ namespace AvaBot
 
         public async Task MessageReceivedAsync(SocketMessage rawMessage)
         {
-            if (rawMessage.Author.IsBot && rawMessage.Author.Id == 503720029456695306) // Is dadbot
-                await rawMessage.Channel.SendMessageAsync("Shut up dad !");
+            if (rawMessage.Author.IsBot)
+                if (rawMessage.Author.Id == 503720029456695306) // Is dadbot
+                    await rawMessage.Channel.SendMessageAsync("Shut up dad !");
+                else if (rawMessage.Author.Id == 605864767915294730) // Is mombot
+                    await rawMessage.Channel.SendMessageAsync("Shut up mom !");
 
             // only accept User messages and not bots
             if (!(rawMessage is SocketUserMessage message))

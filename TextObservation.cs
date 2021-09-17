@@ -16,7 +16,7 @@ namespace AvaBot
             // "cheh" case
             // TODO delete that when I'm changing the GuildSetting class
             if (settings.chehScan &&
-                    new Regex("((c([_*~]*)(h|(\\|-\\|))([eéè_*~]+)(h|(\\|-\\|))+)|(^c([_*~]+)(h|(\\|-\\|))[eéè_*~]*$))").IsMatch(msg))
+                    new Regex("((c([_*~]*)(h|(\\|-\\|))([&eéè_*~]+)(h|(\\|-\\|))+)|(^c([_*~]+)(h|(\\|-\\|))[eéè_*~]*$))").IsMatch(msg))
             {
                 EmbedBuilder embedMessage = new EmbedBuilder()
                     .WithImageUrl("https://media.tenor.com/images/db5d206d665edc6b77c088da7bba097b/tenor.gif")
